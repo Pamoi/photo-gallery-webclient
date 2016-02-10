@@ -1,7 +1,32 @@
 /* app css stylesheet */
 
 body {
-  padding-top: 70px;
+  padding-top: 40px;
+}
+
+p {
+  text-align: justify;
+}
+
+.album-frame {
+  border: 1px solid #c8c8c8;
+  border-radius: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.photo-frame {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.photo-frame-cell {
+  padding: 5px 5px 5px 5px;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .menu {
