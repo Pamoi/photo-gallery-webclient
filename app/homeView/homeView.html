@@ -1,15 +1,23 @@
 <h1 class="page-header">Albums récents</h1>
-
+{{msg}}
 <div class="row album-frame" ng-repeat="album in albums">
   <div class="col-md-4">
     <table class="photo-frame">
       <tr>
-        <td class="photo-frame-cell"><img ng-src="{{ album.photos[0].src }}" alt="" class="img-rounded full-width"/></td>
-        <td class="photo-frame-cell"><img ng-src="{{ album.photos[1].src }}" alt="" class="img-rounded full-width"/></td>
+        <td class="photo-frame-cell">
+          <img http-src="{{ makePhotoUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
+        </td>
+        <td class="photo-frame-cell">
+          <img http-src="{{ makePhotoUrl(album.photos[1].id) }}" alt="" class="img-rounded full-width"/>
+        </td>
       </tr>
       <tr>
-        <td class="photo-frame-cell"><img ng-src="{{ album.photos[2].src }}" alt="" class="img-rounded full-width"/></td>
-        <td class="photo-frame-cell"><img ng-src="{{ album.photos[3].src }}" alt="" class="img-rounded full-width"/></td>
+        <td class="photo-frame-cell">
+          <img http-src="{{ makePhotoUrl(album.photos[2].id) }}" alt="" class="img-rounded full-width"/>
+        </td>
+        <td class="photo-frame-cell">
+          <img http-src="{{ makePhotoUrl(album.photos[3].id) }}" alt="" class="img-rounded full-width"/>
+        </td>
       </tr>
     </table>
   </div>

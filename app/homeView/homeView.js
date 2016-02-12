@@ -1,40 +1,21 @@
 'use strict';
 
-angular.module('photo-gallery.homeView', ['ngRoute'])
+angular.module('photo-gallery.homeView', ['ui.router'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/', {
+.config(['$stateProvider', function($stateProvider) {
+  $stateProvider.state('home', {
+    url: '/',
     templateUrl: 'homeView/homeView.html',
     controller: 'homeViewCtrl'
   });
 }])
 
-.controller('homeViewCtrl', ['$scope', function($scope) {
-  $scope.albums = [
-    {
-      title: 'First album',
-      description: 'This is the album description. More text about interesting details related to the album. Again a bit more text and goodbye.',
-      photos: [
-        { src: '#' },
-        { src: '#' },
-        { src: '#' },
-        { src: '#' }
-      ],
-      comments: [
-        { author: 'Me', text: 'Very nice pictures !' },
-        { author: 'Someone else', text: 'They are not that good :(' }
-      ]
-    },
-    {
-      title: 'Another album',
-      description: 'This album has a shorter description.',
-      photos: [
-        { src: '#' },
-        { src: '#' },
-        { src: '#' },
-        { src: '#' }
-      ],
-      comments: []
-    }
-  ]
+.controller('homeViewCtrl', ['$scope', 'albumFactory', 'backendUrl', function($scope, albumFactory, backendUrl) {
+  albumFactory.fetchPage(1).then(function(albums) {
+    $scope.albums = albums;
+  });
+
+  $scope.makePhotoUrl = function(id) {
+    return backendUrl + '/photo/' + id + '/thumb';
+  };
 }]);

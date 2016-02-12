@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('photo-gallery.albumView', ['ngRoute'])
+angular.module('photo-gallery.albumView', ['ui.router'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/album/:id/:name', {
+.config(['$stateProvider', function($stateProvider) {
+  $stateProvider.state('albumDetail', {
+    url: '/album/:id/:name',
     templateUrl: 'albumView/albumView.html',
     controller: 'albumViewCtrl'
   });
