@@ -8,7 +8,8 @@ angular.module('photo-gallery', [
   'photo-gallery.loginView',
   'photo-gallery.userFactory',
   'photo-gallery.albumFactory',
-  'photo-gallery.httpSrc'
+  'photo-gallery.httpSrc',
+  'photo-gallery.authorList'
   /*'myApp.version'*/
 ])
 

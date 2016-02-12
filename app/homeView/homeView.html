@@ -1,41 +1,46 @@
 <h1 class="page-header">Albums récents</h1>
-{{msg}}
-<div class="row album-frame" ng-repeat="album in albums">
-  <div class="col-md-4">
-    <table class="photo-frame">
-      <tr>
-        <td class="photo-frame-cell">
-          <img http-src="{{ makePhotoUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
-        </td>
-        <td class="photo-frame-cell">
-          <img http-src="{{ makePhotoUrl(album.photos[1].id) }}" alt="" class="img-rounded full-width"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="photo-frame-cell">
-          <img http-src="{{ makePhotoUrl(album.photos[2].id) }}" alt="" class="img-rounded full-width"/>
-        </td>
-        <td class="photo-frame-cell">
-          <img http-src="{{ makePhotoUrl(album.photos[3].id) }}" alt="" class="img-rounded full-width"/>
-        </td>
-      </tr>
-    </table>
+
+<div ng-repeat="album in albums">
+  <div class="row">
+    <div class="col-md-4">
+      <table class="photo-frame">
+        <tr>
+          <td class="photo-frame-cell">
+            <img http-src="{{ makePhotoUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
+          </td>
+          <td class="photo-frame-cell">
+            <img http-src="{{ makePhotoUrl(album.photos[1].id) }}" alt="" class="img-rounded full-width"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="photo-frame-cell">
+            <img http-src="{{ makePhotoUrl(album.photos[2].id) }}" alt="" class="img-rounded full-width"/>
+          </td>
+          <td class="photo-frame-cell">
+            <img http-src="{{ makePhotoUrl(album.photos[3].id) }}" alt="" class="img-rounded full-width"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-4">
+      <h2>{{ album.title }}<br/>
+        <small>Par {{ album.authors | authorList }}, {{ album.date | date: 'le dd.MM yyyy' }}</small>
+      </h2>
+      <p>{{ album.description }}</p>
+    </div>
+    <div class="col-md-4">
+      <div class="comment-frame">
+        <table class="table table-striped table-bordered no-margin-bottom">
+          <th>Commentaires</th>
+          <tr ng-repeat="comment in album.comments"><td>
+            <h5>{{ comment.author.username }} <small>{{ comment.date | date : 'le dd.MM yyyy à hh:mm' }}</small></h5>
+            <p>{{ comment.text }}</p>
+          </td></tr>
+        </table>
+      </div>
+      <textarea class="form-control margin-top-small" rows="3" placeholder="Ajouter un commentaire..."></textarea>
+      <button class="btn btn-primary margin-top-small">Envoyer</button>
+    </div>
   </div>
-  <div class="col-md-4">
-    <h2>{{ album.title }}</h2>
-    <p>{{ album.description }}</p>
-  </div>
-  <div class="col-md-4">
-    <table class="table table-striped table-bordered">
-      <th>Commentaires</th>
-      <tr ng-repeat="comment in album.comments"><td>
-        <h5>{{ comment.author }}</h5>
-        <p>{{ comment.text }}</p>
-      </td></tr>
-      <tr><td>
-        <textarea class="form-control" rows="3" placeholder="Ajouter un commentaire..."></textarea>
-        <button class="btn btn-primary" style="margin-top:5px;">Envoyer</button>
-      </td></tr>
-    </table>
-  </div>
+  <hr/>
 </div>
