@@ -7,15 +7,19 @@ module.exports = function(config){
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/components/**/*.js',
-      'app/view*/**/*.js'
+      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'app/app.js',
+      'app/filters/**/*.js',
+      'app/directives/**/*.js',
+      'app/factories/**/*.js',
+      'app/*View/**/*.js'
     ],
 
     autoWatch : true,
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    browsers : ['Firefox', 'Chrome'],
 
     plugins : [
             'karma-chrome-launcher',
@@ -27,6 +31,10 @@ module.exports = function(config){
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
+    },
+
+    client: {
+      captureConsole: true
     }
 
   });

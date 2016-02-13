@@ -1,16 +1,26 @@
 'use strict';
 
-describe('myApp.view2 module', function() {
+describe('photo-gallery.albumView module', function() {
 
-  beforeEach(module('myApp.view2'));
+  beforeEach(module('photo-gallery.albumView'));
 
-  describe('view2 controller', function(){
+  describe('albumView controller', function(){
 
-    it('should ....', inject(function($controller) {
-      //spec body
-      var view2Ctrl = $controller('View2Ctrl');
-      expect(view2Ctrl).toBeDefined();
+    var $controller, $rootScope, $scope, controller;
+
+    beforeEach(inject(function(_$controller_, _$rootScope_) {
+      $controller = _$controller_;
+      $rootScope = _$rootScope_;
+      $scope = $rootScope.$new();
+      controller = $controller('albumViewCtrl', { $scope: $scope });
     }));
 
+    it('should instanciate.', function() {
+      expect(controller).toBeDefined();
+    });
+
+    it('should have album set.', function() {
+      expect($scope.album.title).toBe('Album title');
+    });
   });
 });

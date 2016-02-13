@@ -10,8 +10,8 @@ angular.module('photo-gallery.loginView', ['ui.router'])
   });
 }])
 
-.controller('loginViewCtrl', ['$scope', '$rootScope', '$state', '$stateParams', 'userFactory',
-function($scope, $rootScope, $state, $stateParams, userFactory) {
+.controller('loginViewCtrl', ['$scope', '$state', '$stateParams', 'userFactory',
+function($scope, $state, $stateParams, userFactory) {
   $scope.login = function() {
     userFactory.authenticate($scope.username, $scope.password).then(function(token) {
       var user = {

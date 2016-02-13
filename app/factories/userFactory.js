@@ -17,7 +17,7 @@ angular.module('photo-gallery.userFactory', [])
           $rootScope.user = user;
 
           if (user && user.token) {
-            $http.defaults.headers.common = { 'X-AUTH-TOKEN' : user.token };
+            $http.defaults.headers.common['X-AUTH-TOKEN'] = user.token;
           }
 
           return user;
