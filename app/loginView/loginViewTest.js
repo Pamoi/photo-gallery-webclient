@@ -68,8 +68,9 @@ describe('photo-gallery.loginView module', function() {
 
         it('should redirect to state given in $stateParams on successful authentification', function() {
           $stateParams.nextState = 'stateX';
+          $stateParams.nextStateParams = { id: 12};
           $scope.$apply();
-          expect($state.go).toHaveBeenCalledWith('stateX');
+          expect($state.go).toHaveBeenCalledWith('stateX', { id: 12});
         });
       });
 

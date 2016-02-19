@@ -22,7 +22,7 @@ p {
 }
 
 .photo-frame-cell {
-  padding: 5px 5px 5px 5px;
+  padding: 5px;
 }
 
 .comment-frame {
@@ -42,31 +42,65 @@ p {
   margin-top: 5px;
 }
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.thumbnail-container {
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
 }
 
-.menu:before {
-  content: "[";
+.photo-thumbnail {
+  float: left;
+  width: 200px;
+  margin: 5px;
+  border: 1px solid #4b4b4b;
 }
 
-.menu:after {
-  content: "]";
+.photo-thumbnail:hover {
+  border-width: 2px;
 }
 
-.menu > li {
+.overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  position: fixed;
+  text-align: center;
+}
+
+.centered-content-outer {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.centered-content {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.overlay-photo-frame {
+  background-color: #202020;
+  padding: 10px;
+  display: inline-block;
+  border-radius: 10px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.overlay-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.delete-button {
+  display: none;
+  float: right;
+}
+
+.delete-button-container:hover .delete-button {
   display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
 }

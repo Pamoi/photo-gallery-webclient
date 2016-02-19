@@ -13,6 +13,8 @@ angular.module('photo-gallery.homeView', ['ui.router'])
 .controller('homeViewCtrl', ['$scope', 'albumFactory', 'backendUrl', function($scope, albumFactory, backendUrl) {
   albumFactory.fetchPage(1).then(function(albums) {
     $scope.albums = albums;
+  }).catch(function() {
+    $scope.message = 'Impossible de charger les albums depuis le serveur.';
   });
 
   $scope.makePhotoUrl = function(id) {

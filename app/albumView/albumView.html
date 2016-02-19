@@ -1,1 +1,55 @@
-<h1>{{ album.title }}</h1>
+<!-- Error message on loading failure -->
+<div ng-show="loadingError">
+  <h1><small>Impossible de charger l'album.</small></h1>
+</div>
+
+<!-- Album content -->
+<div ng-show="album">
+  <h1 class="page-header">
+    {{ album.title }} <small>Par {{ album.authors | authorList }}, {{ album.date | date: 'le dd.MM yyyy' }}</small>
+  </h1>
+  <p>{{ album.description }}</p>
+  <div class="thumbnail-container">
+    <a ng-repeat="photo in album.photos" ng-click="showPhotoDetails(photo)" href="">
+      <img http-src="{{ makeThumbnailUrl(photo.id) }}" alt="" class="img-rounded photo-thumbnail"/>
+    </a>
+  </div>
+  <hr>
+  <table class="table table-striped table-bordered no-margin-bottom">
+    <th>Commentaires</th>
+    <tr ng-repeat="comment in album.comments"><td class="delete-button-container">
+      <h4>{{ comment.author.username }} <small>{{ comment.date | date : 'le dd.MM yyyy à hh:mm' }}</small></h4>
+      <p>
+        {{ comment.text }}
+        <a href="" ng-click="deleteComment(comment)" ng-show="{{ comment.author.username == user.username }}">
+          <span class="glyphicon glyphicon-trash delete-button"></span>
+        </a></p>
+    </td></tr>
+  </table>
+  <textarea class="form-control margin-top-small" rows="3" placeholder="Ajouter un commentaire..."
+  ng-model="commentText"></textarea>
+  <button class="btn btn-primary margin-top-small" ng-click="postComment()">Envoyer</button>
+  <hr>
+</div>
+
+<!-- Photo detail overlay -->
+<div class="overlay" ng-show="detailedPhoto">
+  <div class="centered-content-outer">
+    <div class="centered-content">
+      <div class="overlay-photo-frame">
+        <img http-src="{{ makeResizedUrl(detailedPhoto.id) }}" alt="" class="overlay-img"/>
+        <div class="margin-top-small">
+          <button class="btn btn-default" ng-click="previousPhoto()">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+          <button class="btn btn-default" ng-click="detailedPhoto = null">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          <button class="btn btn-default" ng-click="nextPhoto()">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

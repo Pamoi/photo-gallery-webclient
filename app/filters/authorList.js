@@ -2,6 +2,10 @@
 
 angular.module('photo-gallery.authorList', []).filter('authorList', function() {
   return function(input) {
+    if (!input) {
+      return '';
+    }
+    
     var authors = angular.copy(input);
 
     var author = authors.shift().username;

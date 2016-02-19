@@ -1,5 +1,5 @@
 <h1 class="page-header">Albums récents</h1>
-
+<h2 ng-show="message"><small>{{ message }}</small></h2>
 <div ng-repeat="album in albums">
   <div class="row">
     <div class="col-md-4">
@@ -23,7 +23,7 @@
       </table>
     </div>
     <div class="col-md-4">
-      <h2>{{ album.title }}<br/>
+      <h2><a ui-sref="albumDetail({id: album.id, album: album})">{{ album.title }}</a><br/>
         <small>Par {{ album.authors | authorList }}, {{ album.date | date: 'le dd.MM yyyy' }}</small>
       </h2>
       <p>{{ album.description }}</p>

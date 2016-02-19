@@ -6,7 +6,11 @@ angular.module('photo-gallery.loginView', ['ui.router'])
   $stateProvider.state('login', {
     url: '/login',
     templateUrl: 'loginView/loginView.html',
-    controller: 'loginViewCtrl'
+    controller: 'loginViewCtrl',
+    params: {
+      nextState: null,
+      nextStateParams: {}
+    }
   });
 }])
 
@@ -22,7 +26,7 @@ function($scope, $state, $stateParams, userFactory) {
       userFactory.save(user);
 
       if ($stateParams.nextState) {
-        $state.go($stateParams.nextState);
+        $state.go($stateParams.nextState, $stateParams.nextStateParams);
       } else {
         $state.go('home');
       }

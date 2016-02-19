@@ -31,8 +31,13 @@ describe('photo-gallery.userFactory', function() {
     $provide.value('backendUrl', 'http://test.com');
   }));
 
+  beforeEach(module(function($urlRouterProvider) {
+    $urlRouterProvider.deferIntercept();
+  }));
+
   beforeEach(inject(function(_$httpBackend_, _userFactory_, _$rootScope_, _$http_) {
     $httpBackend = _$httpBackend_;
+    $httpBackend.whenGET('**/*.html').respond(200);
     userFactory = _userFactory_;
     $rootScope = _$rootScope_;
     $http = _$http_;
@@ -65,7 +70,7 @@ describe('photo-gallery.userFactory', function() {
     });
   });
 
-  describe('load null non existing user', function() {
+  describe('load non existing user', function() {
     beforeEach(function() {
       spyOn(window.localStorage, 'getItem').and.returnValue(undefined);
       user = userFactory.load();
