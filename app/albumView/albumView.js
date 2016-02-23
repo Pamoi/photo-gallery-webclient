@@ -58,15 +58,6 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
     return backendUrl + '/photo/' + id + '/resized';
   };
 
-  $scope.postComment = function() {
-    if ($scope.commentText != '' && $scope.requireLogin($state.current, { id: $stateParams.id, album: $scope.album })) {
-      albumFactory.postComment($scope.album.id, $scope.commentText).then(function(a) {
-        $scope.album.comments = a.comments;
-        $scope.commentText = '';
-      });
-    }
-  };
-
   $scope.deleteComment = function(comment) {
     albumFactory.deleteComment($scope.album.id, comment.id).then(function() {
       var index = $scope.album.comments.indexOf(comment);

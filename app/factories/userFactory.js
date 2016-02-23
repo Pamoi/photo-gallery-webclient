@@ -48,7 +48,7 @@ angular.module('photo-gallery.userFactory', [])
        * @param string usr The username
        * @param string pwd The password
        *
-       * @return string A promise resolving to the API token
+       * @return A promise resolving to the API token
        */
       authenticate: function(usr, pwd) {
         return $http.post(backendUrl + '/authenticate', {
@@ -56,6 +56,17 @@ angular.module('photo-gallery.userFactory', [])
           password: pwd
         }).then(function(response) {
           return response.data.token;
+        });
+      },
+
+      /**
+       * Gets a list of all registered users.
+       *
+       * @return A promise resolving to a list of user objects
+       */
+      getUserList: function() {
+        return $http.get(backendUrl + '/user/list').then(function(response) {
+          return response.data;
         });
       }
     }

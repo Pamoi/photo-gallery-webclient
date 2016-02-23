@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css">
   <link rel="stylesheet" href="app.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
@@ -31,7 +32,7 @@
       </div>
       <div class="collapse navbar-collapse" id="navbar-collapse-content">
         <ul class="nav navbar-nav">
-          <li><a href="#"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload</a></li>
+          <li><a href="#/upload"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
@@ -40,6 +41,9 @@
           <button type="submit" class="btn btn-default">Chercher</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
+          <li ng-show="uploader.isUploading">
+            <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ uploader.progress }}%)</a>
+          </li>
           <li ng-show="user == null">
             <a ui-sref="login">
               <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Connexion
@@ -48,7 +52,8 @@
           <li class="dropdown" ng-hide="user == null">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
             aria-expanded="false">
-              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{ user.username }} <span class="caret"></span>
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{ user.username }}
+              <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
               <li><a href="" ng-click="logout()">Déconnexion</a></li>
@@ -66,17 +71,18 @@
   -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/angular-file-upload/dist/angular-file-upload.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="app.js"></script>
   <script src="homeView/homeView.js"></script>
   <script src="albumView/albumView.js"></script>
   <script src="loginView/loginView.js"></script>
+  <script src="uploadView/uploadView.js"></script>
   <script src="factories/userFactory.js"></script>
   <script src="factories/albumFactory.js"></script>
   <script src="directives/httpSrc.js"></script>
+  <script src="directives/commentForm.js"></script>
   <script src="filters/authorList.js"></script>
-  <!--<script src="components/version/version.js"></script>
-  <script src="components/version/version-directive.js"></script>
-  <script src="components/version/interpolate-filter.js"></script>-->
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>

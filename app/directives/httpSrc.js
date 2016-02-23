@@ -32,7 +32,7 @@ SOFTWARE.
 (function () {
   'use strict';
   /*global angular, Blob, URL */
-  
+
   angular.module('photo-gallery.httpSrc', [
   ]).directive('httpSrc', ['$http', function ($http) {
     return {
@@ -65,6 +65,7 @@ SOFTWARE.
                 { type: response.headers('Content-Type') }
               );
               $scope.objectURL = URL.createObjectURL(blob);
+              elem.css('display', 'block');
             });
           }
         });

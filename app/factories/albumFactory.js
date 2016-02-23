@@ -29,6 +29,17 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery'])
     },
 
     /**
+     * Create a new album
+     *
+     * @param Object album An object descrbing the album containing title, description
+     * and date string properties.
+     * @return A promise resolving to the created album.
+     */
+    postAlbum(album) {
+      return $http.post(backendUrl + '/album', album).then(returnData);
+    },
+
+    /**
      * Post a comment about an album.
      *
      * @param number id The id of the album to be commented.

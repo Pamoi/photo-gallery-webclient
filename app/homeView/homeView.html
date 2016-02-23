@@ -1,10 +1,12 @@
 <h1 class="page-header">Albums récents</h1>
-<h2 ng-show="message"><small>{{ message }}</small></h2>
 <div ng-repeat="album in albums">
   <div class="row">
     <div class="col-md-4">
       <table class="photo-frame">
         <tr>
+          <td ng-show="{{ album.photos.length == 0 }}">
+            <p>Cet album ne contient aucune photo.</p>
+          </td>
           <td class="photo-frame-cell">
             <img http-src="{{ makePhotoUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
           </td>
@@ -38,9 +40,9 @@
           </td></tr>
         </table>
       </div>
-      <textarea class="form-control margin-top-small" rows="3" placeholder="Ajouter un commentaire..."></textarea>
-      <button class="btn btn-primary margin-top-small">Envoyer</button>
+      <comment-form album="album"></comment-form>
     </div>
   </div>
   <hr/>
 </div>
+<h2 ng-show="message"><small>{{ message }}</small></h2>

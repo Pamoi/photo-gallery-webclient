@@ -38,6 +38,10 @@ p {
   margin-bottom: 0px;
 }
 
+.big-margin-bottom {
+  margin-bottom: 350px;
+}
+
 .margin-top-small {
   margin-top: 5px;
 }
@@ -53,6 +57,7 @@ p {
   width: 200px;
   margin: 5px;
   border: 1px solid #4b4b4b;
+  display: none;
 }
 
 .photo-thumbnail:hover {
@@ -103,4 +108,8 @@ p {
 
 .delete-button-container:hover .delete-button {
   display: inline;
+}
+
+.photo-preview {
+  height: 120px;
 }
