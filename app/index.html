@@ -36,9 +36,9 @@
         </ul>
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Entrez un nom d'album">
+            <input type="text" class="form-control" placeholder="Entrez un nom d'album" ng-model="term">
           </div>
-          <button type="submit" class="btn btn-default">Chercher</button>
+          <button type="submit" class="btn btn-default" ng-click="search()">Chercher</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li ng-show="uploader.isUploading">
@@ -78,6 +78,7 @@
   <script src="albumView/albumView.js"></script>
   <script src="loginView/loginView.js"></script>
   <script src="uploadView/uploadView.js"></script>
+  <script src="searchView/searchView.js"></script>
   <script src="factories/userFactory.js"></script>
   <script src="factories/albumFactory.js"></script>
   <script src="directives/httpSrc.js"></script>

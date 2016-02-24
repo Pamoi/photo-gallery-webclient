@@ -5,8 +5,14 @@
 
 <!-- Album content -->
 <div ng-show="album">
-  <h1 class="page-header">
-    {{ album.title }} <small>Par {{ album.authors | authorList }}, {{ album.date | date: 'le dd.MM yyyy' }}</small>
+  <h1 class="page-header delete-button-container">
+    {{ album.title }}
+    <small>
+      Par {{ album.authors | authorList }}, {{ album.date | date: 'le dd.MM yyyy' }}
+      <a href="" ng-click="deleteAlbum(album)" ng-show="isUserAuthor()">
+        <span class="glyphicon glyphicon-trash delete-button"></span>
+      </a>
+    </small>
   </h1>
   <p>{{ album.description }}</p>
   <p ng-show="album.photos.length == 0">Cet album ne contient aucune photo.</p>
@@ -24,7 +30,8 @@
         {{ comment.text }}
         <a href="" ng-click="deleteComment(comment)" ng-show="{{ comment.author.username == user.username }}">
           <span class="glyphicon glyphicon-trash delete-button"></span>
-        </a></p>
+        </a>
+      </p>
     </td></tr>
   </table>
   <comment-form album="album"></comment-form>

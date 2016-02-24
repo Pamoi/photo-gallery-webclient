@@ -9,6 +9,7 @@ angular.module('photo-gallery', [
   'photo-gallery.albumView',
   'photo-gallery.loginView',
   'photo-gallery.uploadView',
+  'photo-gallery.searchView',
   'photo-gallery.userFactory',
   'photo-gallery.albumFactory',
   'photo-gallery.httpSrc',
@@ -18,6 +19,36 @@ angular.module('photo-gallery', [
 
 .config(['$urlRouterProvider', function($urlRouterProvider) {
   $urlRouterProvider.otherwise('/')
+}])
+
+.value('backendUrl', 'http://girod.ddns.net')
+
+.run(['backendUrl', '$rootScope', function(backendUrl, $rootScope) {
+  $rootScope.makePhotoUrl = function(id) {
+    if (id) {
+      return backendUrl + '/photo/' + id;
+    } else {
+      return null;
+    }
+  };
+
+  $rootScope.makeThumbnailUrl = function(id) {
+    var photoUrl = $rootScope.makePhotoUrl(id);
+    if (photoUrl) {
+      return photoUrl + '/thumb';
+    } else {
+      return null;
+    }
+  };
+
+  $rootScope.makeResizedUrl = function(id) {
+    var photoUrl = $rootScope.makePhotoUrl(id);
+    if (photoUrl) {
+      return photoUrl + '/resized';
+    } else {
+      return null;
+    }
+  };
 }])
 
 .run(['$http', '$httpParamSerializerJQLike', function($http, $httpParamSerializerJQLike) {
@@ -38,12 +69,16 @@ angular.module('photo-gallery', [
   };
 }])
 
-.value('backendUrl', 'http://localhost:8080')
-
 .controller('mainCtrl', ['$scope', '$rootScope', 'userFactory', '$state',
 function($scope, $rootScope, userFactory, $state) {
   $scope.logout = function() {
     userFactory.save(null);
     $state.go('home');
+  };
+
+  $scope.search = function() {
+    if ($scope.term) {
+      $state.go('search', { term: $scope.term });
+    }
   };
 }]);

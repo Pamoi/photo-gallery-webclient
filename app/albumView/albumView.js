@@ -4,7 +4,7 @@ angular.module('photo-gallery.albumView', ['ui.router', 'photo-gallery.albumFact
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('albumDetail', {
-    url: '/album/:id',
+    url: '/album/:id/:name',
     templateUrl: 'albumView/albumView.html',
     controller: 'albumViewCtrl',
     params: {
@@ -47,23 +47,28 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
     $scope.detailedPhoto = $scope.album.photos[index];
   }
 
-  $scope.makeThumbnailUrl = function(id) {
-    return backendUrl + '/photo/' + id + '/thumb';
-  };
-
-  $scope.makeResizedUrl = function(id) {
-    if (typeof id != "number") {
-      return null;
-    }
-    return backendUrl + '/photo/' + id + '/resized';
-  };
-
   $scope.deleteComment = function(comment) {
     albumFactory.deleteComment($scope.album.id, comment.id).then(function() {
       var index = $scope.album.comments.indexOf(comment);
       if (index > -1) {
         $scope.album.comments.splice(index, 1);
       }
+    });
+  };
+
+  $scope.isUserAuthor = function() {
+    if (!$scope.user || !$scope.album || !$scope.album.authors) {
+      return false;
+    }
+
+    return $scope.album.authors.filter(function(a) {
+      return a.username == $scope.user.username;
+    }).length > 0;
+  };
+
+  $scope.deleteAlbum = function() {
+    albumFactory.deleteAlbum($scope.album.id).then(function() {
+      $state.go('home');
     });
   };
 

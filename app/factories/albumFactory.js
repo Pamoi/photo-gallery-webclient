@@ -24,19 +24,27 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery'])
      * @param number id The id of the album to get.
      * @return A promise resolving to the album object.
      */
-    fetchAlbum(id) {
+    fetchAlbum: function(id) {
       return $http.get(backendUrl + '/album/' + id).then(returnData);
     },
 
     /**
      * Create a new album
      *
-     * @param Object album An object descrbing the album containing title, description
-     * and date string properties.
+     * @param Object album An object descrbing the album containing title, description, date string
+     * and comma-separated list of authors ids properties.
      * @return A promise resolving to the created album.
      */
-    postAlbum(album) {
+    postAlbum: function(album) {
       return $http.post(backendUrl + '/album', album).then(returnData);
+    },
+
+    searchAlbum: function(term) {
+      return $http.get(backendUrl + '/album/search/' + term).then(returnData);
+    },
+
+    deleteAlbum: function(id) {
+      return $http.delete(backendUrl + '/album/' + id);
     },
 
     /**
@@ -46,7 +54,7 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery'])
      * @param string text The text of the comment.
      * @return A promise resolving to the updated album object.
      */
-    postComment(id, text) {
+    postComment: function(id, text) {
       return $http.post(backendUrl + '/album/' + id + '/comment', {
         text: text
       }).then(returnData);
@@ -59,7 +67,7 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery'])
      * @param number commentId The id of the comment to delete.
      * @return A promise resolving to the http request result.
      */
-    deleteComment(albumId, commentId) {
+    deleteComment: function(albumId, commentId) {
       return $http.delete(backendUrl + '/album/' + albumId + '/comment/' + commentId);
     }
   }

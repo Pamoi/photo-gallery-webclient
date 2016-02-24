@@ -69,6 +69,11 @@ function($scope, $http, $state, backendUrl, albumFactory, userFactory) {
       return;
     }
 
+    if ($scope.uploader.queue.length == 0) {
+      $scope.noPhotoError = true;
+      return;
+    }
+
     // Create album
     var authorsIds = $scope.authors.map(function(a) {
       return a.id;

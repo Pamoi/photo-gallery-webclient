@@ -129,4 +129,66 @@ describe('photo-gallery.albumFactory', function() {
       expect(response.data).toBe('error');
     });
   });
+
+  describe('post album', function() {
+
+    it('should post album data and return newly created album.', function() {
+      $httpBackend.expect('POST', 'http://test.com/album',
+      'authorsIds=2,3,4&date=01-02-2016&description=Desc&title=Title')
+      .respond(200, 'Album data');
+
+      var album;
+      albumFactory.postAlbum({
+        title: 'Title',
+        description: 'Desc',
+        date: '01-02-2016',
+        authorsIds: '2,3,4'
+      }).then(function(a) {
+        album = a;
+      });
+      $httpBackend.flush();
+      expect(album).toBe('Album data');
+    });
+
+    it('should return response on error.', function() {
+      $httpBackend.expect('POST', 'http://test.com/album')
+      .respond(422, 'error');
+
+      var response;
+      albumFactory.postAlbum({}).catch(function(r) {
+        response = r;
+      });
+      $httpBackend.flush();
+      expect(response.status).toBe(422);
+      expect(response.data).toBe('error');
+    });
+  });
+
+  describe('search album', function() {
+
+    it('should send search request and return results.', function() {
+      $httpBackend.expect('GET', 'http://test.com/album/search/toto')
+      .respond(200, 'Search results');
+
+      var results;
+      albumFactory.searchAlbum('toto').then(function(r) {
+        results = r;
+      });
+      $httpBackend.flush();
+      expect(results).toBe('Search results');
+    });
+
+    it('should return response on error.', function() {
+      $httpBackend.expect('GET', 'http://test.com/album/search/toto')
+      .respond(403, 'error');
+
+      var response;
+      albumFactory.searchAlbum('toto').catch(function(r) {
+        response = r;
+      });
+      $httpBackend.flush();
+      expect(response.status).toBe(403);
+      expect(response.data).toBe('error');
+    });
+  });
 });
