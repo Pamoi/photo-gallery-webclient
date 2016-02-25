@@ -62,7 +62,7 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
     }
 
     return $scope.album.authors.filter(function(a) {
-      return a.username == $scope.user.username;
+      return a.id == $scope.user.id;
     }).length > 0;
   };
 

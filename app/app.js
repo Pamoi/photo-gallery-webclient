@@ -77,7 +77,9 @@ function($scope, $rootScope, userFactory, $state) {
   };
 
   $scope.search = function() {
-    if ($scope.term) {
+    if (!$scope.term) {
+      $state.go('home');
+    } else {
       $state.go('search', { term: $scope.term });
     }
   };

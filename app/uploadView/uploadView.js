@@ -35,7 +35,7 @@ function($scope, $http, $state, backendUrl, albumFactory, userFactory) {
   $scope.authors = [];
   userFactory.getUserList().then(function(userList) {
     $scope.users = userList.filter(function(u) {
-      return u.username != $scope.user.username;
+      return u.id != $scope.user.id;
     });
   });
 

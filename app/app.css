@@ -102,12 +102,11 @@ p {
 }
 
 .delete-button {
-  display: none;
-  float: right;
+  color: gray;
 }
 
-.delete-button-container:hover .delete-button {
-  display: inline;
+.delete-button:hover {
+  color: #c80014;
 }
 
 .photo-preview {
