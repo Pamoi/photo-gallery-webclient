@@ -17,12 +17,7 @@ angular.module('photo-gallery.loginView', ['ui.router'])
 .controller('loginViewCtrl', ['$scope', '$state', '$stateParams', 'userFactory',
 function($scope, $state, $stateParams, userFactory) {
   $scope.login = function() {
-    userFactory.authenticate($scope.username, $scope.password).then(function(token) {
-      var user = {
-        username: $scope.username,
-        token: token
-      };
-
+    userFactory.authenticate($scope.username, $scope.password).then(function(user) {
       userFactory.save(user);
 
       if ($stateParams.nextState) {

@@ -21,7 +21,7 @@ angular.module('photo-gallery', [
   $urlRouterProvider.otherwise('/')
 }])
 
-.value('backendUrl', 'http://girod.ddns.net')
+.value('backendUrl', 'http://localhost:8080')
 
 .run(['backendUrl', '$rootScope', function(backendUrl, $rootScope) {
   $rootScope.makePhotoUrl = function(id) {

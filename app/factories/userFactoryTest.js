@@ -111,14 +111,14 @@ describe('photo-gallery.userFactory', function() {
   describe('authenticate on server', function() {
     it('should send request to the server and get back a token.', function() {
       $httpBackend.expect('POST', 'http://test.com/authenticate', 'password=1234&username=toto')
-      .respond(200, '{"token":"IamAToken"}');
+      .respond(200, 'user object');
 
-      var token;
-      userFactory.authenticate('toto', '1234').then(function(t) {
-        token = t;
+      var user;
+      userFactory.authenticate('toto', '1234').then(function(u) {
+        user = u;
       });
       $httpBackend.flush();
-      expect(token).toBe('IamAToken');
+      expect(user).toBe('user object');
     });
 
     it('should return response on error', function() {

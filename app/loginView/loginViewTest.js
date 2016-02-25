@@ -43,7 +43,7 @@ describe('photo-gallery.loginView module', function() {
 
       describe('successful', function() {
         beforeEach(function() {
-          userFactory.authenticate.and.returnValue($q.when('IamAToken'));
+          userFactory.authenticate.and.returnValue($q.when('user data'));
           $scope.username = 'toto';
           $scope.password = '1234';
           $scope.login();
@@ -55,10 +55,7 @@ describe('photo-gallery.loginView module', function() {
 
         it('should save user.', function() {
           $scope.$apply();
-          expect(userFactory.save).toHaveBeenCalledWith({
-            username: 'toto',
-            token: 'IamAToken'
-          });
+          expect(userFactory.save).toHaveBeenCalledWith('user data');
         });
 
         it('should redirect on successful authentification', function() {

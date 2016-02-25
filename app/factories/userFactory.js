@@ -35,7 +35,7 @@ angular.module('photo-gallery.userFactory', [])
         window.localStorage.setItem('photo-gallery.user', angular.toJson(user));
         $rootScope.user = user;
 
-        if (user) {
+        if (user && user.token) {
           $http.defaults.headers.common = { 'X-AUTH-TOKEN' : user.token };
         } else {
           $http.defaults.headers.common = {};
@@ -48,14 +48,14 @@ angular.module('photo-gallery.userFactory', [])
        * @param string usr The username
        * @param string pwd The password
        *
-       * @return A promise resolving to the API token
+       * @return A promise resolving to the authenticated user
        */
       authenticate: function(usr, pwd) {
         return $http.post(backendUrl + '/authenticate', {
           username: usr,
           password: pwd
         }).then(function(response) {
-          return response.data.token;
+          return response.data;
         });
       },
 
