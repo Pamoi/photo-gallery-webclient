@@ -1,0 +1,20 @@
+<div class="overlay" ng-show="photo">
+  <div class="centered-content-outer">
+    <div class="centered-content" id="centeredContent">
+      <div class="overlay-photo-frame" id="photoFrame">
+        <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" />
+        <div class="margin-top-small">
+          <button class="btn btn-default" ng-click="prev()">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+          <button class="btn btn-default" ng-click="photo = null" id="closeDetailButton">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          <button class="btn btn-default" ng-click="next()">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

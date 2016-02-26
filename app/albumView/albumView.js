@@ -82,41 +82,7 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
       $('.thumbnail-container').width(maxBoxPerRow * blockWidth);
   }
 
-  function setPhotoSize() {
-    // Check width
-    $('.overlay-img').width('auto');
-    var imgWidth = $('.overlay-img').width();
-    var windowWidth = $(window).width();
-    if (imgWidth > windowWidth - 20) {
-      $('.overlay-img').width(windowWidth - 20);
-    }
-
-    // Check height
-    $('.overlay-img').height('auto');
-    var imgHeight = $('.overlay-img').height();
-    var windowHeight = $(window).height();
-    if (imgHeight > windowHeight - 60) {
-      $('.overlay-img').height(windowHeight - 60);
-    }
-  }
-
   // Binding callbacks
   $scope.$on('$viewContentLoaded', setContainerWidth);
-  $('.overlay-img').bind('load', setPhotoSize);
   angular.element($window).bind('resize', setContainerWidth);
-  angular.element($window).bind('resize', setPhotoSize);
-
-  // Binding key events
-  angular.element($window).on('keydown', function(e) {
-    if ($scope.detailedPhoto) {
-      if (e.keyCode == 39) {
-        $scope.nextPhoto();
-      } else if (e.keyCode == 37) {
-        $scope.previousPhoto();
-      } else if (e.keyCode == 27) {
-        $scope.detailedPhoto = null;
-      }
-      $scope.$apply();
-    }
-  });
 }]);

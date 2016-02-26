@@ -46,23 +46,4 @@
 </div>
 
 <!-- Photo detail overlay -->
-<div class="overlay" ng-show="detailedPhoto">
-  <div class="centered-content-outer">
-    <div class="centered-content">
-      <div class="overlay-photo-frame">
-        <img http-src="{{ makeResizedUrl(detailedPhoto.id) }}" alt="" class="overlay-img"/>
-        <div class="margin-top-small">
-          <button class="btn btn-default" ng-click="previousPhoto()">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-          </button>
-          <button class="btn btn-default" ng-click="detailedPhoto = null">
-            <span class="glyphicon glyphicon-remove"></span>
-          </button>
-          <button class="btn btn-default" ng-click="nextPhoto()">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<photo-detail photo="detailedPhoto" prev="previousPhoto()" next="nextPhoto()" make-url="makeResizedUrl(id)"></photo-detail>
