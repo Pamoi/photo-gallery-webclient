@@ -23,11 +23,8 @@
   </div>
   <p>{{ album.description }}</p>
   <p ng-show="album.photos.length == 0">Cet album ne contient aucune photo.</p>
-  <div class="thumbnail-container">
-    <a ng-repeat="photo in album.photos" ng-click="showPhotoDetails(photo)" href="">
-      <img http-src="{{ makeThumbnailUrl(photo.id) }}" alt="" class="img-rounded photo-thumbnail"/>
-    </a>
-  </div>
+  <thumbnail-container photos="album.photos" make-url="makeThumbnailUrl(id)" on-click="showPhotoDetails(photo)">
+  </thumbnail-container>
   <hr>
   <table class="table table-striped table-bordered no-margin-bottom">
     <th>Commentaires</th>
@@ -46,4 +43,5 @@
 </div>
 
 <!-- Photo detail overlay -->
-<photo-detail photo="detailedPhoto" prev="previousPhoto()" next="nextPhoto()" make-url="makeResizedUrl(id)"></photo-detail>
+<photo-detail photo="detailedPhoto" prev="previousPhoto()" next="nextPhoto()" make-url="makeResizedUrl(id)">
+</photo-detail>

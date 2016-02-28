@@ -41,9 +41,8 @@ function($scope, albumFactory, $window) {
 
   $scope.loadAlbums();
 
-  // Load more albums when bottom of page is reached
   // Adapted from http://blog.sodhanalibrary.com/2015/02/detect-when-user-scrolls-to-bottom-of.html
-  angular.element($window).bind("scroll", function() {
+  function onEndReached() {
     if (endReached || $scope.fetching) {
       return;
     }
@@ -55,5 +54,11 @@ function($scope, albumFactory, $window) {
     if (windowBottom >= docHeight) {
       $scope.loadAlbums();
     }
+  }
+
+  angular.element($window).on('scroll', onEndReached);
+
+  $scope.$on('$stateChangeStart', function() {
+    angular.element($window).off('scroll', onEndReached);
   });
 }]);

@@ -15,6 +15,7 @@ angular.module('photo-gallery', [
   'photo-gallery.httpSrc',
   'photo-gallery.commentForm',
   'photo-gallery.photoDetail',
+  'photo-gallery.thumbnailContainer',
   'photo-gallery.authorList'
 ])
 

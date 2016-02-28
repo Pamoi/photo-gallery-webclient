@@ -42,7 +42,6 @@ angular.module('photo-gallery.photoDetail', [])
       }
 
       function onKeyPressed(e) {
-        console.log('hi');
         if ($scope.photo) {
           if (e.keyCode == 39) {
             $scope.next();
@@ -55,7 +54,6 @@ angular.module('photo-gallery.photoDetail', [])
         }
       }
 
-      // Bind functions to events
       angular.element($window).on('resize', setFrameSize);
       $('#detailedPhoto').on('load', setFrameSize);
       angular.element($window).on('keydown', onKeyPressed);

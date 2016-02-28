@@ -71,18 +71,4 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
       $state.go('home');
     });
   };
-
-  // Responsive layout callbacks
-  function setContainerWidth() {
-      // Adapted from http://stackoverflow.com/questions/19527104/left-aligned-last-row-in-centered-grid-of-elements
-      $('.thumbnail-container').css('width', 'auto');
-      var windowWidth = $('.container').width();
-      var blockWidth = 210;
-      var maxBoxPerRow = Math.floor(windowWidth / blockWidth);
-      $('.thumbnail-container').width(maxBoxPerRow * blockWidth);
-  }
-
-  // Binding callbacks
-  $scope.$on('$viewContentLoaded', setContainerWidth);
-  angular.element($window).bind('resize', setContainerWidth);
 }]);
