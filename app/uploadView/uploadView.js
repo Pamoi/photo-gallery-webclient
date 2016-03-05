@@ -1,97 +1,131 @@
 'use strict';
 
-angular.module('photo-gallery.uploadView', ['ui.router', 'photo-gallery.albumFactory'])
+angular.module('photo-gallery.uploadView', [
+  'ui.router',
+  'photo-gallery.albumFactory',
+  'ui.bootstrap',
+  'angularFileUpload'
+])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('upload', {
     url: '/upload',
     templateUrl: 'uploadView/uploadView.html',
+    controller: 'uploadViewCtrl'
+  })
+
+  .state('editAlbum', {
+    url: '/edit/:id',
+    templateUrl: 'uploadView/uploadView.html',
     controller: 'uploadViewCtrl',
   });
 }])
 
-.controller('uploadViewCtrl', ['$scope', '$http', '$state', 'backendUrl', 'albumFactory', 'userFactory',
-function($scope, $http, $state, backendUrl, albumFactory, userFactory) {
-  $scope.requireLogin('upload', {});
+.controller('uploadViewCtrl', ['$scope', '$state', '$stateParams', 'albumFactory', 'userFactory', 'FileUploader',
+function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) {
+  var state = $state.current.name;
+  var params = {};
+  $scope.sent = false;
+  $scope.album = {
+    authors: []
+  };
+
+  if (state == 'editAlbum') {
+    params.id = $stateParams.id;
+    $scope.edit = true;
+    $scope.loading = true;
+  }
+
+  $scope.requireLogin(state, params);
+
   // Configure uploader
-  $scope.uploader.headers = { 'X-AUTH-TOKEN': $http.defaults.headers.common['X-AUTH-TOKEN'] };
-  $scope.uploader.alias = 'photo';
-  $scope.uploader.clearQueue();
-  $scope.uploader.url = backendUrl + '/photo';
+  if ($scope.user) {
+    $scope.uploader = $scope.getUploader();
+  } else {
+    // Do not create global uploader as the user will be redirected
+    $scope.uploader = new FileUploader();
+  }
   $scope.totalSize = 0;
   $scope.uploader.onAfterAddingFile = function(item) {
     $scope.totalSize += item.file.size;
   };
-  $scope.uploader.filters.push({
-    name: 'imageFilter',
-    fn: function(item, options) {
-      var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-      return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-    }
-  });
 
   // Get user list to add authors
+  function isNotCurrentUser(user) {
+    return user.id != $scope.user.id;
+  }
+
+  function setLoadingError() {
+    $scope.loadingError = true;
+    $scope.loading = false;
+  }
+
   $scope.users = [];
-  $scope.authors = [];
   userFactory.getUserList().then(function(userList) {
-    $scope.users = userList.filter(function(u) {
-      return u.id != $scope.user.id;
-    });
-  });
-
-  $scope.addAuthor = function($item) {
-    $scope.authors.push($item);
-    var index = $scope.users.indexOf($item);
-    $scope.users.splice(index, 1);
-    $scope.author = '';
-  };
-
-  $scope.removeAuthor = function(author) {
-    var index = $scope.authors.indexOf(author);
-    $scope.authors.splice(index, 1);
-    $scope.users.push(author);
-  };
+    $scope.users = userList.filter(isNotCurrentUser);
+    if (state == 'editAlbum') {
+      albumFactory.fetchAlbum(params.id).then(function(a) {
+        $scope.album = a;
+        $scope.album.date = new Date(a.date);
+        $scope.album.authors = $scope.album.authors.filter(isNotCurrentUser);
+        var authorsIds = $scope.album.authors.map(function(u) { return u.id });
+        $scope.users = $scope.users.filter(function(u) {
+          return (authorsIds.indexOf(u.id) < 0);
+        });
+        $scope.loading = false;
+      }).catch(setLoadingError);
+    }
+  }).catch(setLoadingError);
 
   // Setup calendar
   $scope.today = new Date();
-  $scope.date = new Date();
+  $scope.album.date = new Date();
 
-  $scope.openCalendar = function() {
-    $scope.isCalendarOpen = true;
-  }
+  $scope.$on('$stateChangeStart', function() {
+    $scope.removeUploader($scope.uploader);
+  });
 
   // Send album function
   $scope.send = function() {
     // Show validation for title
     $scope.form.title.$pristine = false;
 
-    if (!$scope.form.$valid) {
+    if (!$scope.form.$valid || $scope.sent) {
       return;
     }
 
-    if ($scope.uploader.queue.length == 0) {
+    if ($scope.uploader.queue.length == 0 && state == 'upload') {
       $scope.noPhotoError = true;
       return;
     }
 
+    $scope.sent = true;
+
     // Create album
-    var authorsIds = $scope.authors.map(function(a) {
+    var authorsIds = $scope.album.authors.map(function(a) {
       return a.id;
     });
     var album = {
-      title: $scope.title,
-      description: $scope.description,
-      date: $scope.date.toISOString(),
-      authorsIds: authorsIds.join(',')
+      title: $scope.album.title,
+      description: $scope.album.description,
+      date: $scope.album.date.toISOString(),
+      authorsIds: authorsIds.join(','),
     };
 
-    // Post it to server and upload photos
-    albumFactory.postAlbum(album).then(function(a) {
-      // Redirect to new album after uploading has finished
+    var promise;
+    if (state == 'upload') {
+      promise = albumFactory.postAlbum(album);
+    } else {
+      album.id = $scope.album.id;
+      promise = albumFactory.putAlbum(album);
+    }
+
+    promise.then(function(a) {
+      $scope.albumId = a.id;
+
       $scope.uploader.onCompleteAll = function() {
-        if ($state.current.name == 'upload') {
-          $state.go('albumDetail', { id: a.id });
-        }
+        $scope.removeUploader($scope.uploader);
+        $scope.uploadComplete = true;
       };
 
       $scope.uploader.onBeforeUploadItem = function(item) {
@@ -99,7 +133,13 @@ function($scope, $http, $state, backendUrl, albumFactory, userFactory) {
         item.formData.push({ albumId: a.id });
       };
 
-      $scope.uploader.uploadAll();
+      if ($scope.uploader.queue.length == 0) {
+        $scope.uploader.onCompleteAll();
+      } else {
+        $scope.uploader.uploadAll();
+      }
+    }).catch(function(response) {
+      $scope.sendError = true;
     });
   };
 }])

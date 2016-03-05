@@ -41,8 +41,8 @@
           <button type="submit" class="btn btn-default" ng-click="search()">Chercher</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-show="uploader.isUploading">
-            <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ uploader.progress }}%)</a>
+          <li ng-show="isUploading()">
+            <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ getUploadProgress() }}%)</a>
           </li>
           <li ng-show="user == null">
             <a ui-sref="login">
@@ -86,6 +86,7 @@
   <script src="directives/commentForm.js"></script>
   <script src="directives/photoDetail.js"></script>
   <script src="directives/thumbnailContainer.js"></script>
+  <script src="directives/authorPicker.js"></script>
   <script src="filters/authorList.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>

@@ -1,0 +1,19 @@
+<div class="form-group">
+  <label for="authorPicker" class="col-sm-2 control-label">Co-auteurs</label>
+  <div class="col-sm-10">
+    <div class="input-group">
+      <input type="text" class="form-control" id="authorPicker" placeholder="Entrez un nom"
+      uib-typeahead="user.username for user in users | filter:{username:$viewValue} | limitTo:8" ng-model="author"
+      typeahead-on-select="addAuthor($item)" typeahead-editable="false" autocomplete="off" />
+      <div class="input-group-addon"><i class=" glyphicon glyphicon-plus"></i></div>
+    </div>
+    <ul class="list-group margin-top-small" ng-show="model.length != 0">
+      <li class="list-group-item delete-button-container" ng-repeat="user in model">
+        {{ user.username }}
+        <a href="" ng-click="removeAuthor(user)">
+          <span class="glyphicon glyphicon-trash delete-button"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

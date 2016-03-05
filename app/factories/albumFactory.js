@@ -39,6 +39,10 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery'])
       return $http.post(backendUrl + '/album', album).then(returnData);
     },
 
+    putAlbum: function(album) {
+      return $http.post(backendUrl + '/album/' + album.id, album).then(returnData);
+    },
+
     searchAlbum: function(term) {
       return $http.get(backendUrl + '/album/search/' + term).then(returnData);
     },

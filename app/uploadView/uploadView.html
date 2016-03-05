@@ -1,12 +1,16 @@
 <div nv-file-drop uploader="uploader">
-  <h1 class="page-header">Ajouter un album</h1>
+  <h1 class="page-header" ng-hide="edit">Ajouter un album</h1>
+  <h1 class="page-header" ng-show="edit">Modifier un album</h1>
 
-  <form novalidate class="form-horizontal" name="form">
+  <h2 ng-show="loadingError"><small>Impossible de contacter le serveur.</small></h2>
+  <img src="img/loading.gif" alt="" class="center-block" ng-show="loading" />
+
+  <form novalidate class="form-horizontal" name="form" ng-hide="loadingError || loading">
     <div class="form-group" ng-class="{'has-error': !(form.title.$valid || form.title.$pristine)}">
       <label for="inputTitle" class="col-sm-2 control-label">Titre</label>
       <div class="col-sm-10">
         <input type="text" class="form-control" id="inputTitle" name="title" placeholder="Titre" ng-minlength="3"
-        ng-model="title" ng-required="true" autocomplete="off" />
+        ng-model="album.title" ng-required="true" autocomplete="off" />
         <span class="help-block" ng-show="!(form.title.$valid || form.title.$pristine)">
           Le titre doit comporter au moins trois lettres.
         </span>
@@ -15,7 +19,7 @@
     <div class="form-group" ng-class="{'has-error': form.desc.$invalid}">
       <label for="inputDesc" class="col-sm-2 control-label">Description</label>
       <div class="col-sm-10">
-        <textarea class="form-control" id="inputDesc" rows="3" placeholder="Description" ng-model="description"
+        <textarea class="form-control" id="inputDesc" rows="3" placeholder="Description" ng-model="album.description"
         name="desc" ng-maxlength="4000">
         </textarea>
         <span class="help-block" ng-show="form.desc.$invalid">
@@ -23,35 +27,17 @@
         </span>
       </div>
     </div>
-    <div class="form-group">
-      <label for="inputAuthors" class="col-sm-2 control-label">Co-auteurs</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input type="text" class="form-control" id="inputAuthors" placeholder="Entrez un nom"
-          uib-typeahead="user.username for user in users | filter:{username:$viewValue} | limitTo:8" ng-model="author"
-          typeahead-on-select="addAuthor($item)" typeahead-editable="false" autocomplete="off" />
-          <div class="input-group-addon"><i class=" glyphicon glyphicon-plus"></i></div>
-        </div>
-        <ul class="list-group margin-top-small" ng-show="authors.length != 0">
-          <li class="list-group-item delete-button-container" ng-repeat="user in authors">
-            {{ user.username }}
-            <a href="" ng-click="removeAuthor(user)">
-              <span class="glyphicon glyphicon-trash delete-button"></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <author-picker users="users" model="album.authors"></author-picker>
     <div class="form-group" ng-class="{'has-error': form.date.$invalid}">
       <label for="date" class="col-sm-2 control-label">Date</label>
       <div class="col-sm-10">
         <div class="form-inline">
           <div class="input-group">
-            <input name="date" type="text" class="form-control" uib-datepicker-popup="dd.MM.yyyy" ng-model="date"
+            <input name="date" type="text" class="form-control" uib-datepicker-popup="dd.MM.yyyy" ng-model="album.date"
             is-open="isCalendarOpen" close-text="Fermer" current-text="Aujourd'hui" ng-required="true"
-            clear-text="Annuler" max-date="today" autocomplete="off" />
+            clear-text="Annuler" max-date="today" starting-day="1" autocomplete="off" />
             <span class="input-group-addon">
-              <a href="" ng-click="openCalendar()"><i class="glyphicon glyphicon-calendar"></i></a>
+              <a href="" ng-click="isCalendarOpen = !isCalendarOpen"><i class="glyphicon glyphicon-calendar"></i></a>
             </span>
           </div>
         </div>
@@ -61,8 +47,11 @@
       </div>
     </div>
     <div class="form-group" ng-class="{'has-error': noPhotoError}">
-      <label class="col-sm-2 control-label">Photos</label>
-      <div class="col-sm-10">
+      <label class="col-sm-2 control-label">
+        <span ng-hide="edit">Photos</span>
+        <span ng-show="edit">Ajouter des photos</span>
+      </label>
+      <div class="col-sm-10 file-container">
         <input type="file" nv-file-select="" uploader="uploader" multiple style="margin-bottom:10px;" />
         <span class="help-block" ng-show="noPhotoError">
           Veuillez ajouter au moins une photo à l'album.
@@ -108,7 +97,10 @@
           </div>
           <hr class="visible-xs">
         </div>
-
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
         <div ng-show="uploader.isUploading">
           <h3>Progrès total</h3>
           <div class="progress" style="">
@@ -116,11 +108,14 @@
             ng-style="{ 'width': uploader.progress + '%' }"></div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button class="btn btn-default big-margin-bottom" ng-click="send()">
+        <div class="alert alert-success" role="alert" ng-show="uploadComplete">
+          Envoi terminé.
+          <a ui-sref="albumDetail({id: albumId, name: album.title})" href="" class="alert-link">Voir l'album</a>
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="sendError">
+          Une erreur inattendue s'est produite ! Nous sommes désolés.
+        </div>
+        <button class="btn btn-default big-margin-bottom" ng-click="send()" ng-class="{disabled: sent}">
           <i class="glyphicon glyphicon-upload"></i> Envoyer
         </button>
       </div>

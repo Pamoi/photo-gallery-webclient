@@ -13,15 +13,15 @@
       </small>
     </h1>
   </div>
-  <div ng-show="isUserAuthor()">
-    <button class="btn btn-primary">
-      Modifier
+  <div ng-show="isUserAuthor()" style="margin-bottom:20px;">
+    <button class="btn btn-primary" ui-sref="editAlbum({ id: album.id })">
+      <i class="glyphicon glyphicon-pencil"></i> Modifier
     </button>
     <button class="btn btn-danger" ng-click="deleteAlbum()">
       <i class="glyphicon glyphicon-trash"></i> Supprimer
     </button>
   </div>
-  <p>{{ album.description }}</p>
+  <p class="margin-top-medium">{{ album.description }}</p>
   <p ng-show="album.photos.length == 0">Cet album ne contient aucune photo.</p>
   <thumbnail-container photos="album.photos" make-url="makeThumbnailUrl(id)" on-click="showPhotoDetails(photo)">
   </thumbnail-container>
@@ -33,7 +33,7 @@
       <p>
         {{ comment.text }}
         <a href="" ng-click="deleteComment(comment)" ng-show="{{ comment.author.id == user.id }}">
-          <span class="glyphicon glyphicon-trash pull-right delete-button"></span>
+          <span class="glyphicon glyphicon-trash delete-button"></span>
         </a>
       </p>
     </td></tr>

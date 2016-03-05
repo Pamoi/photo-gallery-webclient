@@ -16,6 +16,7 @@ angular.module('photo-gallery', [
   'photo-gallery.commentForm',
   'photo-gallery.photoDetail',
   'photo-gallery.thumbnailContainer',
+  'photo-gallery.authorPicker',
   'photo-gallery.authorList'
 ])
 
@@ -58,9 +59,35 @@ angular.module('photo-gallery', [
   $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
 }])
 
-.run(['$rootScope', '$state', 'userFactory', 'FileUploader', function($rootScope, $state, userFactory, FileUploader) {
+.run(['$rootScope', '$state', 'userFactory', 'FileUploader', 'backendUrl',
+ function($rootScope, $state, userFactory, FileUploader, backendUrl) {
   userFactory.load();
-  $rootScope.uploader = new FileUploader();
+  //$rootScope.uploader = new FileUploader();
+  $rootScope.uploaders = [];
+
+  $rootScope.getUploader = function() {
+    var uploader = new FileUploader();
+    uploader.headers = { 'X-AUTH-TOKEN': $rootScope.user.token };
+    uploader.alias = 'photo';
+    uploader.url = backendUrl + '/photo';
+    uploader.filters.push({
+      name: 'imageFilter',
+      fn: function(item, options) {
+        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+      }
+    });
+    $rootScope.uploaders.push(uploader);
+    return uploader;
+  };
+
+  $rootScope.removeUploader = function(uploader) {
+    var index = $rootScope.uploaders.indexOf(uploader);
+    if (index >= 0) {
+      $rootScope.uploaders.splice(index, 1);
+    }
+  };
+
   $rootScope.requireLogin = function(currentState, params) {
     if ($rootScope.user) {
       return true;
@@ -71,8 +98,8 @@ angular.module('photo-gallery', [
   };
 }])
 
-.controller('mainCtrl', ['$scope', '$rootScope', 'userFactory', '$state',
-function($scope, $rootScope, userFactory, $state) {
+.controller('mainCtrl', ['$scope', 'userFactory', '$state',
+function($scope, userFactory, $state) {
   $scope.logout = function() {
     userFactory.save(null);
     $state.go('home');
@@ -85,4 +112,27 @@ function($scope, $rootScope, userFactory, $state) {
       $state.go('search', { term: $scope.term });
     }
   };
+
+  $scope.getUploadProgress = function() {
+    if ($scope.uploaders.length == 0) {
+      return 0;
+    }
+
+    var progress = 0;
+    for (var i = 0; i < $scope.uploaders.length; i++) {
+      progress += $scope.uploaders[i].progress;
+    }
+
+    return progress / $scope.uploaders.length;
+  };
+
+  $scope.isUploading = function() {
+    for (var i = 0; i < $scope.uploaders.length; i++) {
+      if ($scope.uploaders[i].isUploading) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }]);

@@ -35,7 +35,7 @@
         <table class="table table-striped table-bordered no-margin-bottom">
           <th>Commentaires</th>
           <tr ng-repeat="comment in album.comments"><td>
-            <h5>{{ comment.author.username }} <small>{{ comment.date | date : 'le dd.MM yyyy à hh:mm' }}</small></h5>
+            <h5>{{ comment.author.username }} <small>{{ comment.date | date : 'le dd.MM yyyy à HH:mm' }}</small></h5>
             <p>{{ comment.text }}</p>
           </td></tr>
         </table>
