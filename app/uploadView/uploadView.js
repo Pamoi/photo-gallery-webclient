@@ -82,7 +82,9 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
   $scope.album.date = new Date();
 
   $scope.$on('$stateChangeStart', function() {
-    $scope.removeUploader($scope.uploader);
+    if (!$scope.uploader.isUploading) {
+      $scope.removeUploader($scope.uploader);
+    }
   });
 
   // Send album function

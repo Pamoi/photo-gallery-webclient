@@ -134,5 +134,5 @@ function($scope, userFactory, $state) {
     }
 
     return false;
-  }
+  };
 }]);
