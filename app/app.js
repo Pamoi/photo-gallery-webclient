@@ -5,6 +5,7 @@ angular.module('photo-gallery', [
   'angularFileUpload',
   'ui.router',
   'ui.bootstrap',
+  'photo-gallery.config',
   'photo-gallery.homeView',
   'photo-gallery.albumView',
   'photo-gallery.loginView',
@@ -23,8 +24,6 @@ angular.module('photo-gallery', [
 .config(['$urlRouterProvider', function($urlRouterProvider) {
   $urlRouterProvider.otherwise('/')
 }])
-
-.value('backendUrl', 'http://localhost:8080')
 
 .run(['backendUrl', '$rootScope', function(backendUrl, $rootScope) {
   $rootScope.makePhotoUrl = function(id) {
@@ -121,7 +120,7 @@ function($scope, userFactory, $state) {
     } else {
       var count = 0;
       var progress = 0;
-      
+
       for (var i = 0; i < $scope.uploaders.length; i++) {
         if ($scope.uploaders[i].isUploading) {
           count++;
