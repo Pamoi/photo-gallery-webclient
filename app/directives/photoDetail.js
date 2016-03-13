@@ -43,24 +43,39 @@ angular.module('photo-gallery.photoDetail', [])
 
       function onKeyPressed(e) {
         if ($scope.photo) {
+          var photo = $scope.photo;
           if (e.keyCode == 39) {
             $scope.next();
           } else if (e.keyCode == 37) {
             $scope.prev();
           } else if (e.keyCode == 27) {
             $scope.photo = null;
+          } else {
+            return;
+          }
+          $scope.$apply();
+          if ($scope.photo != photo) {
+            $scope.loading = true;
           }
           $scope.$apply();
         }
       }
 
+      function onImgLoad() {
+        setFrameSize();
+        $scope.loading = false;
+        $scope.$apply();
+      }
+
+      $scope.loading = true;
+
       angular.element($window).on('resize', setFrameSize);
-      $('#detailedPhoto').on('load', setFrameSize);
+      $('#detailedPhoto').on('load', onImgLoad);
       angular.element($window).on('keydown', onKeyPressed);
 
       elem.on('$destroy', function() {
         angular.element($window).off('resize', setFrameSize);
-        $('#detailedPhoto').off('load', setFrameSize);
+        $('#detailedPhoto').off('load', onImgLoad);
         angular.element($window).off('keydown', onKeyPressed);
       });
     }

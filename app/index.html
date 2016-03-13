@@ -42,7 +42,7 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li ng-show="isUploading()">
-            <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ getUploadProgress() }}%)</a>
+            <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ getUploadProgressText() }})</a>
           </li>
           <li ng-show="user == null">
             <a ui-sref="login">

@@ -66,7 +66,9 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
     if (state == 'editAlbum') {
       albumFactory.fetchAlbum(params.id).then(function(a) {
         $scope.album = a;
-        $scope.album.date = new Date(a.date);
+        var date = new Date(a.date);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+        $scope.album.date = date;
         $scope.album.authors = $scope.album.authors.filter(isNotCurrentUser);
         var authorsIds = $scope.album.authors.map(function(u) { return u.id });
         $scope.users = $scope.users.filter(function(u) {
@@ -183,11 +185,15 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
       };
 
       // Empirical timeout to avoid blocking the UI
-      $timeout(function() {
+      var promise = $timeout(function() {
         reader.readAsDataURL(params.file);
         count -= 2000;
       }, count);
       count += 2000;
+
+      element.on('$destroy', function() {
+        $timeout.cancel(promise);
+      });
     }
   };
 }]);

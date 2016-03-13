@@ -2,8 +2,9 @@
   <div class="centered-content-outer">
     <div class="centered-content" id="centeredContent">
       <div class="overlay-photo-frame" id="photoFrame">
-        <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" />
-        <div class="margin-top-small">
+        <img src="img/loading.gif" alt="" ng-show="loading" />
+        <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
+        <div class="margin-top-small" ng-hide="loading">
           <button class="btn btn-default" ng-click="prev()">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </button>

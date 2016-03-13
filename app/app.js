@@ -113,17 +113,28 @@ function($scope, userFactory, $state) {
     }
   };
 
-  $scope.getUploadProgress = function() {
+  $scope.getUploadProgressText = function() {
     if ($scope.uploaders.length == 0) {
-      return 0;
-    }
+      return '';
+    } else if ($scope.uploaders.length == 1) {
+      return $scope.uploaders[0].progress + ' %';
+    } else {
+      var count = 0;
+      var progress = 0;
+      
+      for (var i = 0; i < $scope.uploaders.length; i++) {
+        if ($scope.uploaders[i].isUploading) {
+          count++;
+          progress = $scope.uploaders[i].progress;
+        }
+      }
 
-    var progress = 0;
-    for (var i = 0; i < $scope.uploaders.length; i++) {
-      progress += $scope.uploaders[i].progress;
+      if (count == 1) {
+        return progress + ' %';
+      } else {
+        return count + ' albums';
+      }
     }
-
-    return progress / $scope.uploaders.length;
   };
 
   $scope.isUploading = function() {
