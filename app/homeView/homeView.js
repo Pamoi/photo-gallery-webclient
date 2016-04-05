@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.homeView', ['ui.router'])
+angular.module('photo-gallery.homeView', ['ui.router', 'photo-gallery.albumFactory'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('home', {

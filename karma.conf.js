@@ -12,6 +12,7 @@ module.exports = function(config){
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'app/bower_components/jquery/dist/jquery.js',
       'app/app.js',
+      'app/config.js',
       'app/filters/**/*.js',
       'app/directives/**/*.js',
       'app/factories/**/*.js',

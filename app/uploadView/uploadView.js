@@ -3,6 +3,7 @@
 angular.module('photo-gallery.uploadView', [
   'ui.router',
   'photo-gallery.albumFactory',
+  'photo-gallery.userFactory',
   'ui.bootstrap',
   'angularFileUpload'
 ])

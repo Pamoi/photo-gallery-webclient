@@ -5,13 +5,13 @@
         <img src="img/loading.gif" alt="" ng-show="loading" />
         <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
         <div class="margin-top-small" ng-hide="loading">
-          <button class="btn btn-default" ng-click="prev()">
+          <button class="btn btn-default" ng-click="previousPhoto()">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </button>
           <button class="btn btn-default" ng-click="photo = null" id="closeDetailButton">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
-          <button class="btn btn-default" ng-click="next()">
+          <button class="btn btn-default" ng-click="nextPhoto()">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </button>
         </div>

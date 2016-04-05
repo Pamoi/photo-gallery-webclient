@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.userFactory', [])
+angular.module('photo-gallery.userFactory', ['photo-gallery.config'])
 
 .factory('userFactory', ['backendUrl', '$http', '$rootScope', function(backendUrl, $http, $rootScope) {
   return {

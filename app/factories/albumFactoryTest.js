@@ -4,7 +4,7 @@ describe('photo-gallery.albumFactory', function() {
 
   var $httpBackend, albumFactory;
 
-  beforeEach(module('photo-gallery.albumFactory', function($provide) {
+  beforeEach(module('photo-gallery', function($provide) {
     $provide.value('backendUrl', 'http://test.com');
   }));
 

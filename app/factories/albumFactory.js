@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.albumFactory', ['photo-gallery'])
+angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
 
 .factory('albumFactory', ['backendUrl', '$http', function(backendUrl, $http) {
   function returnData(response) {

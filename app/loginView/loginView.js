@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.loginView', ['ui.router'])
+angular.module('photo-gallery.loginView', ['ui.router', 'photo-gallery.userFactory'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('login', {
