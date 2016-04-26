@@ -2,7 +2,7 @@
 
 angular.module('photo-gallery.photoDetail', [])
 
-.directive('photoDetail', ['$window', function($window) {
+.directive('photoDetail', ['$window', '$timeout', function($window, $timeout) {
   return {
     templateUrl: 'directives/photoDetail.html',
     restrict: 'E',
@@ -13,21 +13,18 @@ angular.module('photo-gallery.photoDetail', [])
       makeUrl: '&makeUrl'
     },
     link: function($scope, elem, attrs) {
+      $scope.$watch('photo', function() {
+        $scope.loading = true;
+      });
+
       function changePhoto(direction) {
-        var id = $scope.photo.id;
-
-        if (direction == 'next') {
-          $scope.next();
-        } else if (direction == 'prev') {
-          $scope.prev();
-        }
-
-        $scope.$apply();
-
-        if ($scope.photo.id != id) {
-          $scope.loading = true;
-          $scope.$apply();
-        }
+        $timeout(function() {
+          if (direction == 'next') {
+            $scope.next();
+          } else if (direction == 'prev') {
+            $scope.prev();
+          }
+        });
       }
 
       $scope.nextPhoto = function() {
@@ -67,19 +64,19 @@ angular.module('photo-gallery.photoDetail', [])
       }
 
       function onKeyPressed(e) {
-        if ($scope.photo) {
-          var photo = $scope.photo;
-          if (e.keyCode == 39) {
-            $scope.nextPhoto();
-          } else if (e.keyCode == 37) {
-            $scope.previousPhoto();
-          } else if (e.keyCode == 27) {
-            $scope.photo = null;
-            $scope.$apply();
-          } else {
-            return;
+        $timeout(function() {
+          if ($scope.photo) {
+            if (e.keyCode == 39) {
+              changePhoto('next');
+            } else if (e.keyCode == 37) {
+              changePhoto('prev');
+            } else if (e.keyCode == 27) {
+              $scope.photo = null;
+            } else {
+              return;
+            }
           }
-        }
+        });
       }
 
       function onImgLoad() {
@@ -89,21 +86,19 @@ angular.module('photo-gallery.photoDetail', [])
         setFrameSize();
       }
 
-      $scope.loading = true;
-
       var photo = $('#detailedPhoto');
       angular.element($window).on('resize', setFrameSize);
       photo.on('load', onImgLoad);
       photo.on('dragstart', function(e) { e.preventDefault(); });
-      photo.on('swipeleft', $scope.nextPhoto);
-      photo.on('swiperight',$scope.previousPhoto);
+      photo.on('swipeleft', function() { changePhoto('next'); });
+      photo.on('swiperight', function() { changePhoto('prev'); });
       angular.element($window).on('keydown', onKeyPressed);
 
       elem.on('$destroy', function() {
         angular.element($window).off('resize', setFrameSize);
-        photo.off('load', onImgLoad);
-        photo.off('swipeleft', $scope.previousPhoto);
-        photo.off('swiperight', $scope.nextPhoto);
+        photo.off('load');
+        photo.off('swipeleft');
+        photo.off('swiperight');
         angular.element($window).off('keydown', onKeyPressed);
       });
     }

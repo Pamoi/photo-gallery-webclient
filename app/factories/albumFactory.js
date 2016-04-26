@@ -39,14 +39,33 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
       return $http.post(backendUrl + '/album', album).then(returnData);
     },
 
+    /**
+     * Updates an album
+     *
+     * @param Object album An object descrbing the album containing title, description, date string
+     * and comma-separated list of authors ids properties.
+     * @return A promise resolving to the updated album.
+     */
     putAlbum: function(album) {
       return $http.post(backendUrl + '/album/' + album.id, album).then(returnData);
     },
 
+    /**
+     * Search for albums whose names are containing a given string.
+     *
+     * @param String term The string to search for.
+     * @return A promise resolving to a list of matching albums.
+     */
     searchAlbum: function(term) {
       return $http.get(backendUrl + '/album/search/' + term).then(returnData);
     },
 
+    /**
+     * Delete an album
+     *
+     * @param number The id of the album to delete.
+     * @return A promise resolving to the HTTP response from the server.
+     */
     deleteAlbum: function(id) {
       return $http.delete(backendUrl + '/album/' + id);
     },
