@@ -59,13 +59,13 @@ p {
 .photo-thumbnail {
   float: left;
   width: 200px;
-  margin: 5px;
-  border: 1px solid #4b4b4b;
+  margin: 1px;
+  border: 0px solid #4b4b4b;
   display: none;
 }
 
 .photo-thumbnail:hover {
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .overlay {
@@ -115,7 +115,7 @@ p {
 }
 
 .photo-preview {
-  height: 120px;
+  max-height: 120px;
 }
 
 .file-container {

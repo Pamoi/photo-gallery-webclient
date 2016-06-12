@@ -10,7 +10,7 @@ describe('authorList filter', function() {
         { username: 'Titi' },
         { username: 'Tata' },
         { username: 'Tutu' },
-      ])).toBe('Toto avec Titi, Tata, Tutu');
+      ])).toBe('Toto, Titi, Tata, Tutu');
     }));
 
     it('should produce a string with the only author\'s username', inject(function(authorListFilter) {

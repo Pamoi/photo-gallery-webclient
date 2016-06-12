@@ -169,7 +169,7 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
 
   return {
     restrict: 'A',
-    template: '<img alt="" class="photo-preview" />',
+    template: '<img src="img/loading.gif" alt="" class="photo-preview" />',
     link: function(scope, element, attributes) {
       if (!helper.support) return;
 

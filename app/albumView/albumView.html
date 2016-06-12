@@ -23,6 +23,7 @@
   </div>
   <p class="margin-top-medium">{{ album.description }}</p>
   <p ng-show="album.photos.length == 0">Cet album ne contient aucune photo.</p>
+  <hr ng-show="album.description">
   <thumbnail-container photos="album.photos" make-url="makeThumbnailUrl(id)" on-click="showPhotoDetails(photo)">
   </thumbnail-container>
   <hr>
