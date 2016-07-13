@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.accountView', ['ui.router', 'photo-gallery.userFactory'])
+angular.module('photo-gallery.accountView', ['ui.router', 'photo-gallery.userFactory', 'photo-gallery'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('account', {
