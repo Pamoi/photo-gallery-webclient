@@ -60,6 +60,23 @@ angular.module('photo-gallery.userFactory', ['photo-gallery.config'])
       },
 
       /**
+       * Changes the password for a user.
+       *
+       * @param string usr The username of the user that wishes to change it's password
+       * @param string oldPass The current password of the user
+       * @param string newPass The new password of the user
+       *
+       * @return A promise resolving the the server's response
+       */
+      setPassword: function(usr, oldPass, newPass) {
+        return $http.post(backendUrl + '/password', {
+          username: usr,
+          oldPass: oldPass,
+          newPass, newPass
+        });
+      },
+
+      /**
        * Gets a list of all registered users.
        *
        * @return A promise resolving to a list of user objects

@@ -9,6 +9,7 @@ angular.module('photo-gallery', [
   'photo-gallery.homeView',
   'photo-gallery.albumView',
   'photo-gallery.loginView',
+  'photo-gallery.accountView',
   'photo-gallery.uploadView',
   'photo-gallery.searchView',
   'photo-gallery.userFactory',
