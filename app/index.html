@@ -41,10 +41,10 @@
           <button type="submit" class="btn btn-default" ng-click="search()">Chercher</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-show="isUploading()">
+          <li ng-show="isUploading()" class="ng-cloak">
             <a href=""><img src="img/upload.gif"/> Envoi en cours ({{ getUploadProgressText() }})</a>
           </li>
-          <li ng-show="user == null">
+          <li ng-show="user == null" class="ng-cloak">
             <a ui-sref="login">
               <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Connexion
             </a>
@@ -52,8 +52,10 @@
           <li class="dropdown" ng-hide="user == null">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
             aria-expanded="false">
-              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{ user.username }}
-              <span class="caret"></span>
+              <div class="ng-cloak">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{ user.username }}
+                <span class="caret"></span>
+              </div>
             </a>
             <ul class="dropdown-menu">
               <li><a ui-sref="account">Mon compte</a></li>

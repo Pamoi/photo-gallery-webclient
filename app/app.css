@@ -122,3 +122,8 @@ p {
   max-height: 400px;
   overflow-y: auto;
 }
+
+.photo-placeholder {
+  width: 300px;
+  height: 300px;
+}

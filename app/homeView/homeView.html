@@ -2,27 +2,29 @@
 <div ng-repeat="album in albums">
   <div class="row">
     <div class="col-md-4">
-      <table class="photo-frame">
-        <tr>
-          <td ng-show="{{ album.photos.length == 0 }}">
-            <p>Cet album ne contient aucune photo.</p>
-          </td>
-          <td class="photo-frame-cell">
-            <img http-src="{{ makeThumbnailUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
-          </td>
-          <td class="photo-frame-cell">
-            <img http-src="{{ makeThumbnailUrl(album.photos[1].id) }}" alt="" class="img-rounded full-width"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="photo-frame-cell">
-            <img http-src="{{ makeThumbnailUrl(album.photos[2].id) }}" alt="" class="img-rounded full-width"/>
-          </td>
-          <td class="photo-frame-cell">
-            <img http-src="{{ makeThumbnailUrl(album.photos[3].id) }}" alt="" class="img-rounded full-width"/>
-          </td>
-        </tr>
-      </table>
+      <a ui-sref="albumDetail({id: album.id, name: album.title, album: album})">
+        <table class="photo-frame">
+          <tr>
+            <td ng-show="{{ album.photos.length == 0 }}">
+              <p>Cet album ne contient aucune photo.</p>
+            </td>
+            <td class="photo-frame-cell">
+              <img http-src="{{ makeThumbnailUrl(album.photos[0].id) }}" alt="" class="img-rounded full-width"/>
+            </td>
+            <td class="photo-frame-cell">
+              <img http-src="{{ makeThumbnailUrl(album.photos[1].id) }}" alt="" class="img-rounded full-width"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="photo-frame-cell">
+              <img http-src="{{ makeThumbnailUrl(album.photos[2].id) }}" alt="" class="img-rounded full-width"/>
+            </td>
+            <td class="photo-frame-cell">
+              <img http-src="{{ makeThumbnailUrl(album.photos[3].id) }}" alt="" class="img-rounded full-width"/>
+            </td>
+          </tr>
+        </table>
+      </a>
     </div>
     <div class="col-md-4">
       <h2><a ui-sref="albumDetail({id: album.id, name: album.title, album: album})">{{ album.title }}</a><br/>
