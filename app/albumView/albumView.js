@@ -27,6 +27,8 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
 
   $scope.detailedPhoto = null;
 
+  $scope.downloadText = 'Télécharger';
+
   $scope.showPhotoDetails = function(photo) {
     $scope.detailedPhoto = photo;
   }
@@ -71,4 +73,24 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
       $state.go('home');
     });
   };
+
+  $scope.downloadAlbum = function() {
+    $scope.downloadText = 'Téléchargement en cours...';
+
+    albumFactory.downloadAlbum($scope.album.id).then(function(data) {
+      var file = new Blob([ data ], {
+        type : 'application/zip'
+      });
+
+      var fileURL = URL.createObjectURL(file);
+      var link = document.createElement('a');
+      link.href = fileURL;
+      link.target = '_blank';
+      link.download = 'album.zip';
+      document.body.appendChild(link);
+      link.click();
+
+      $scope.downloadText = 'Télécharger';
+    });
+  }
 }]);

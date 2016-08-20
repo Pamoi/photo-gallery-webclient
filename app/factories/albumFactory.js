@@ -92,6 +92,12 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
      */
     deleteComment: function(albumId, commentId) {
       return $http.delete(backendUrl + '/album/' + albumId + '/comment/' + commentId);
+    },
+
+    downloadAlbum: function(albumId) {
+      return $http.get(backendUrl + '/album/' + albumId + '/download', {
+        responseType: 'arraybuffer'
+      }).then(returnData);
     }
   }
 }]);
