@@ -75,22 +75,11 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
   };
 
   $scope.downloadAlbum = function() {
-    $scope.downloadText = 'Téléchargement en cours...';
-
-    albumFactory.downloadAlbum($scope.album.id).then(function(data) {
-      var file = new Blob([ data ], {
-        type : 'application/zip'
-      });
-
-      var fileURL = URL.createObjectURL(file);
+    albumFactory.getDownloadToken($scope.album.id).then(function(token) {
       var link = document.createElement('a');
-      link.href = fileURL;
-      link.target = '_blank';
-      link.download = 'album.zip';
+      link.href = backendUrl + '/album/' + $scope.album.id + '/download?token=' + token;
       document.body.appendChild(link);
       link.click();
-
-      $scope.downloadText = 'Télécharger';
     });
   }
 }]);

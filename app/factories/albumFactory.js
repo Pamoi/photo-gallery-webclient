@@ -94,10 +94,10 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
       return $http.delete(backendUrl + '/album/' + albumId + '/comment/' + commentId);
     },
 
-    downloadAlbum: function(albumId) {
-      return $http.get(backendUrl + '/album/' + albumId + '/download', {
-        responseType: 'arraybuffer'
-      }).then(returnData);
+    getDownloadToken: function(albumId) {
+      return $http.get(backendUrl + '/album/' + albumId + '/downloadToken').then(function(response) {
+        return response.data.token;
+      });
     }
   }
 }]);
