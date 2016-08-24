@@ -94,6 +94,12 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
       return $http.delete(backendUrl + '/album/' + albumId + '/comment/' + commentId);
     },
 
+    /**
+     * Get a download token for a given album.
+     *
+     * @param number albumId The id of the album to download.
+     * @return A promise resolving to the download token.
+     */
     getDownloadToken: function(albumId) {
       return $http.get(backendUrl + '/album/' + albumId + '/downloadToken').then(function(response) {
         return response.data.token;
