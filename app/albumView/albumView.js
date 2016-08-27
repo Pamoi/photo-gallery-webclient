@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.albumView', ['ui.router', 'photo-gallery.albumFactory'])
+angular.module('photo-gallery.albumView', ['ui.router', 'ui.bootstrap', 'photo-gallery.albumFactory'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('albumDetail', {
@@ -13,8 +13,8 @@ angular.module('photo-gallery.albumView', ['ui.router', 'photo-gallery.albumFact
   });
 }])
 
-.controller('albumViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'albumFactory', 'backendUrl',
-function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
+.controller('albumViewCtrl', ['$scope', '$state', '$stateParams', '$window', '$uibModal', 'albumFactory', 'backendUrl',
+function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backendUrl) {
   if ($stateParams.album) {
     $scope.album = $stateParams.album;
   } else {
@@ -26,8 +26,6 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
   }
 
   $scope.detailedPhoto = null;
-
-  $scope.downloadText = 'Télécharger';
 
   $scope.showPhotoDetails = function(photo) {
     $scope.detailedPhoto = photo;
@@ -69,7 +67,18 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
   };
 
   $scope.deleteAlbum = function() {
-    albumFactory.deleteAlbum($scope.album.id).then(function() {
+    var modal = $uibModal.open({
+      controller: 'ModalInstanceCtrl',
+      controllerAs: '$ctrl',
+      templateUrl: 'albumView/modal.html',
+      resolve: {
+        albumId: function() {
+          return $scope.album.id;
+        }
+      }
+    });
+
+    modal.result.then(function() {
       $state.go('home');
     });
   };
@@ -81,5 +90,23 @@ function($scope, $state, $stateParams, $window, albumFactory, backendUrl) {
       document.body.appendChild(link);
       link.click();
     });
+  }
+}])
+
+.controller('ModalInstanceCtrl', ['$uibModalInstance', 'albumFactory', 'albumId',
+function ($uibModalInstance, albumFactory, albumId) {
+  var $ctrl = this;
+  $ctrl.text = 'Toutes les photos seront définitivement supprimées.';
+
+  $ctrl.delete = function () {
+    albumFactory.deleteAlbum(albumId).then(function() {
+      $uibModalInstance.close();
+    }).catch(function() {
+      $ctrl.text = 'Erreur lors de la suppression de l\'album.';
+    });
+  };
+
+  $ctrl.cancel = function() {
+    $uibModalInstance.dismiss('cancel');
   }
 }]);
