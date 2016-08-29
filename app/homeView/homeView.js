@@ -12,32 +12,6 @@ angular.module('photo-gallery.homeView', ['ui.router', 'photo-gallery.albumFacto
 
 .controller('homeViewCtrl', ['$scope', 'albumFactory', '$window',
 function($scope, albumFactory, $window) {
-  function randomIndex(maxIndex) {
-    // return a random number between 0 and maxIndex (exclusive)
-    return Math.floor(Math.random() * maxIndex);
-  }
-
-  function selectCoverPhotos(album) {
-    if (!album.photos) {
-      return album;
-    }
-
-    if (album.photos.length <= 4) {
-      album.coverPhotos = album.photos;
-    } else {
-      var photos = angular.copy(album.photos);
-      album.coverPhotos = [];
-
-      for (var i = 0; i < 4; i++) {
-        var index = randomIndex(photos.length);
-        album.coverPhotos.push(photos[index]);
-        photos.splice(index, 1);
-      }
-    }
-
-    return album;
-  }
-
   var page = 0, endReached = false;
   $scope.fetching = false;
   $scope.albums = [];
@@ -52,7 +26,7 @@ function($scope, albumFactory, $window) {
     $scope.fetching = true;
     albumFactory.fetchPage(page).then(function(a) {
       for (var i = 0; i < a.length; ++i) {
-        $scope.albums.push(selectCoverPhotos(a[i]));
+        $scope.albums.push(a[i]);
       }
     }).catch(function(response) {
       if (response.status == 404) {

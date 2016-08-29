@@ -7,6 +7,40 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
     return response.data;
   }
 
+  function randomIndex(maxIndex) {
+    // return a random number between 0 and maxIndex (exclusive)
+    return Math.floor(Math.random() * maxIndex);
+  }
+
+  function selectCoverPhotos(album) {
+    if (!album.photos) {
+      return album;
+    }
+
+    if (album.photos.length <= 4) {
+      album.coverPhotos = album.photos;
+    } else {
+      var photos = angular.copy(album.photos);
+      album.coverPhotos = [];
+
+      for (var i = 0; i < 4; i++) {
+        var index = randomIndex(photos.length);
+        album.coverPhotos.push(photos[index]);
+        photos.splice(index, 1);
+      }
+    }
+
+    return album;
+  }
+
+  function coverPhotos(albums) {
+    if (Array.isArray(albums)) {
+      return albums.map(selectCoverPhotos);
+    } else {
+      return albums;
+    }
+  }
+
   return {
     /**
      * Get a page of the list of all albums sorted by most recent upload date.
@@ -15,7 +49,7 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
      * @return A promise resolving to a list of albums.
      */
     fetchPage: function(page) {
-      return $http.get(backendUrl + '/album/list/' + page).then(returnData);
+      return $http.get(backendUrl + '/album/list/' + page).then(returnData).then(coverPhotos);
     },
 
     /**
@@ -57,7 +91,7 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
      * @return A promise resolving to a list of matching albums.
      */
     searchAlbum: function(term) {
-      return $http.get(backendUrl + '/album/search/' + term).then(returnData);
+      return $http.get(backendUrl + '/album/search/' + term).then(returnData).then(coverPhotos);
     },
 
     /**

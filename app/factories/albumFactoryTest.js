@@ -26,14 +26,14 @@ describe('photo-gallery.albumFactory', function() {
 
     it('should fetch page from server and return it.', function() {
       $httpBackend.expect('GET', 'http://test.com/album/list/1')
-      .respond(200, 'album list');
+      .respond(200, [1, 2, 3]);
 
       var albumList;
       albumFactory.fetchPage(1).then(function(l) {
         albumList = l;
       });
       $httpBackend.flush();
-      expect(albumList).toBe('album list');
+      expect(albumList).toEqual([1, 2, 3]);
     });
 
     it('should return response on error.', function() {
