@@ -56,6 +56,15 @@ function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backend
     });
   };
 
+  $scope.deletePhoto = function(photo) {
+    albumFactory.deletePhoto(photo.id).then(function() {
+      var index = $scope.album.photos.indexOf(photo);
+      if (index > -1) {
+        $scope.album.photos.splice(index, 1);
+      }
+    });
+  };
+
   $scope.isUserAuthor = function() {
     if (!$scope.user || !$scope.album || !$scope.album.authors) {
       return false;

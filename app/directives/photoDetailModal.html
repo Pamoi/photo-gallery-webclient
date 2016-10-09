@@ -3,10 +3,10 @@
 </div>
 <div class="modal-body" id="modal-body">
   <div>
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" ng-click="$ctrl.downloadPhoto()">
       Télécharger <span class="glyphicon glyphicon-download"></span>
     </button>
-    <button class="btn btn-danger">
+    <button class="btn btn-danger" ng-show="$ctrl.canDelete" ng-click="$ctrl.delete()">
       Supprimer <span class="glyphicon glyphicon-trash"></span>
     </button>
   </div>

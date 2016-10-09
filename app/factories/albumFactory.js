@@ -105,6 +105,16 @@ angular.module('photo-gallery.albumFactory', ['photo-gallery.config'])
     },
 
     /**
+     * Delete a photo
+     *
+     * @param number The id of the photo to delete.
+     * @return A promise resolving to the HTTP response from the server.
+     */
+    deletePhoto: function(id) {
+      return $http.delete(backendUrl + '/photo/' + id);
+    },
+
+    /**
      * Post a comment about an album.
      *
      * @param number id The id of the album to be commented.

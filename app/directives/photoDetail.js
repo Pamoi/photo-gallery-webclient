@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
+angular.module('photo-gallery.photoDetail', ['ui.bootstrap', 'photo-gallery.albumFactory'])
 
 .directive('photoDetail', ['$window', '$timeout', '$uibModal', function($window, $timeout, $uibModal) {
   return {
@@ -8,9 +8,11 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
     restrict: 'E',
     scope: {
       photo: '=',
+      isAuthor: '=',
       prev: '&prev',
       next: '&next',
-      makeUrl: '&makeUrl'
+      makeUrl: '&makeUrl',
+      deletePhoto: '&deletePhoto'
     },
     link: function($scope, elem, attrs) {
       $scope.$watch('photo', function() {
@@ -29,11 +31,11 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
 
       $scope.nextPhoto = function() {
         changePhoto('next');
-      }
+      };
 
       $scope.previousPhoto = function() {
         changePhoto('prev');
-      }
+      };
 
       $scope.openModal = function() {
         var modal = $uibModal.open({
@@ -41,18 +43,27 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
           controllerAs: '$ctrl',
           templateUrl: 'directives/photoDetailModal.html',
           resolve: {
-            photoId: function() {
-              return $scope.photo.id;
+            photo: function() {
+              return $scope.photo;
+            },
+            canDelete: function() {
+              return $scope.isAuthor;
             }
           }
         });
-      }
+
+        modal.result.then(function() {
+          $scope.deletePhoto({photo: $scope.photo});
+          $scope.photo = null;
+        });
+      };
 
       function setFrameSize() {
         var frame = $('#photoFrame');
         var photo = $('#detailedPhoto');
         var centered = $('#centeredContent');
 
+        // Fit screen width if necessary
         frame.width('auto');
         var frameOuterWidth = frame.outerWidth(true);
         var frameWidth = frame.width();
@@ -62,6 +73,7 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
           frame.width(windowWidth - paddingWidth);
         }
 
+        // Fit screen height if necessary
         frame.height('auto');
         photo.height('auto');
         var buttonHeight = $('#closeDetailButton').outerHeight(true);
@@ -99,6 +111,7 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
         setFrameSize();
       }
 
+      // Register event callbacks
       var photo = $('#detailedPhoto');
       angular.element($window).on('resize', setFrameSize);
       photo.on('load', onImgLoad);
@@ -118,12 +131,25 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
   };
 }])
 
-.controller('PhotoModalCtrl', ['$uibModalInstance', 'photoId',
-function ($uibModalInstance, photoId) {
+.controller('PhotoModalCtrl', ['$uibModalInstance', 'photo', 'canDelete',
+function ($uibModalInstance, photo, canDelete, deletePhoto) {
   var $ctrl = this;
-  $ctrl.pid = photoId;
+  $ctrl.canDelete = canDelete;
+  $ctrl.photo = photo;
+
+  $ctrl.downloadPhoto = function() {
+    var link = document.createElement('a');
+    link.href = $('#detailedPhoto').attr('src');
+    link.download = '';
+    document.body.appendChild(link);
+    link.click();
+  };
+
+  $ctrl.delete = function() {
+    $uibModalInstance.close();
+  };
 
   $ctrl.cancel = function() {
     $uibModalInstance.dismiss('cancel');
-  }
+  };
 }]);
