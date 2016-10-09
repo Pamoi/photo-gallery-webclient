@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('photo-gallery.photoDetail', [])
+angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
 
-.directive('photoDetail', ['$window', '$timeout', function($window, $timeout) {
+.directive('photoDetail', ['$window', '$timeout', '$uibModal', function($window, $timeout, $uibModal) {
   return {
     templateUrl: 'directives/photoDetail.html',
     restrict: 'E',
@@ -35,6 +35,19 @@ angular.module('photo-gallery.photoDetail', [])
         changePhoto('prev');
       }
 
+      $scope.openModal = function() {
+        var modal = $uibModal.open({
+          controller: 'PhotoModalCtrl',
+          controllerAs: '$ctrl',
+          templateUrl: 'directives/photoDetailModal.html',
+          resolve: {
+            photoId: function() {
+              return $scope.photo.id;
+            }
+          }
+        });
+      }
+
       function setFrameSize() {
         var frame = $('#photoFrame');
         var photo = $('#detailedPhoto');
@@ -57,7 +70,7 @@ angular.module('photo-gallery.photoDetail', [])
         var paddingHeight = centeredOuterHeight - frameHeight;
         var windowHeight = $(window).height();
         if (centeredOuterHeight > windowHeight) {
-          photo.height(windowHeight - paddingHeight - buttonHeight);
+          photo.height(windowHeight - paddingHeight - 2 * buttonHeight);
           photo.width('auto');
           frame.width('auto');
         }
@@ -103,4 +116,14 @@ angular.module('photo-gallery.photoDetail', [])
       });
     }
   };
+}])
+
+.controller('PhotoModalCtrl', ['$uibModalInstance', 'photoId',
+function ($uibModalInstance, photoId) {
+  var $ctrl = this;
+  $ctrl.pid = photoId;
+
+  $ctrl.cancel = function() {
+    $uibModalInstance.dismiss('cancel');
+  }
 }]);
