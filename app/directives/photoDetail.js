@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.photoDetail', ['ui.bootstrap', 'photo-gallery.albumFactory'])
+angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
 
 .directive('photoDetail', ['$window', '$timeout', '$uibModal', function($window, $timeout, $uibModal) {
   return {
