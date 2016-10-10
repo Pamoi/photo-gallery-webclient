@@ -70,7 +70,9 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
         var paddingWidth = frameOuterWidth - frameWidth;
         var windowWidth = $(window).width();
         if (frameOuterWidth > windowWidth) {
-          frame.width(windowWidth - paddingWidth);
+          // Hide vertical frame side if photo is larger than screen
+          frame.css('padding', '10px 0px');
+          frame.width(windowWidth);
         }
 
         // Fit screen height if necessary
@@ -85,6 +87,10 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
           photo.height(windowHeight - paddingHeight - 2 * buttonHeight);
           photo.width('auto');
           frame.width('auto');
+          // Show vertical frame side if vertical resizing reduced image width
+          if (photo.width() < windowWidth - paddingWidth) {
+            frame.css('padding', '10px');
+          }
         }
       }
 
