@@ -26,6 +26,7 @@ angular.module('photo-gallery', [
   $urlRouterProvider.otherwise('/')
 }])
 
+// Provide application wide functions to create photo urls (should be refactored)
 .run(['backendUrl', '$rootScope', function(backendUrl, $rootScope) {
   $rootScope.makePhotoUrl = function(id) {
     if (id) {
@@ -54,15 +55,43 @@ angular.module('photo-gallery', [
   };
 }])
 
+// Provide a function to check if the user is logged in and redirect to the login page if not
+.run(['$rootScope', '$state', 'userFactory', function($rootScope, $state, userFactory) {
+  userFactory.load();
+
+  $rootScope.requireLogin = function(currentState, params) {
+    if ($rootScope.user) {
+      return true;
+    } else {
+      $state.go('login', { nextState: currentState, nextStateParams: params });
+      return false;
+    }
+  };
+}])
+
+// Transform form requests in www-form-urlencoded format instead of json
 .run(['$http', '$httpParamSerializerJQLike', function($http, $httpParamSerializerJQLike) {
   $http.defaults.headers.post = { 'Content-Type' : 'application/x-www-form-urlencoded' }
   $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
 }])
 
+// Automatic logout if the saved token is refused by the API
+.run(['$http', '$state', 'userFactory', function($http, $state, userFactory) {
+  function logoutOnInvalidToken(response, headersGetter, status) {
+    if (status == 403 && response.message == 'Invalid token') {
+      userFactory.save(null);
+      $state.go('login');
+    }
+
+    return response;
+  }
+
+  $http.defaults.transformResponse.push(logoutOnInvalidToken);
+}])
+
+// Manage uploader instances for parallel uploads
 .run(['$rootScope', '$state', 'userFactory', 'FileUploader', 'backendUrl',
  function($rootScope, $state, userFactory, FileUploader, backendUrl) {
-  userFactory.load();
-  //$rootScope.uploader = new FileUploader();
   $rootScope.uploaders = [];
 
   $rootScope.getUploader = function() {
@@ -87,17 +116,9 @@ angular.module('photo-gallery', [
       $rootScope.uploaders.splice(index, 1);
     }
   };
-
-  $rootScope.requireLogin = function(currentState, params) {
-    if ($rootScope.user) {
-      return true;
-    } else {
-      $state.go('login', { nextState: currentState, nextStateParams: params });
-      return false;
-    }
-  };
 }])
 
+// Controller for the navbar
 .controller('mainCtrl', ['$scope', 'userFactory', '$state',
 function($scope, userFactory, $state) {
   $scope.logout = function() {
