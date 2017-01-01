@@ -1,5 +1,5 @@
 <div class="overlay" id="overlay" ng-show="photo">
-  <div class="centered-content-outer">
+  <!--<div class="centered-content-outer">
     <div class="centered-content" id="centeredContent">
       <div class="overlay-photo-frame" id="photoFrame">
         <div>
@@ -26,5 +26,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
+  <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
 </div>
