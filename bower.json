@@ -13,6 +13,7 @@
     "angular-file-upload": "~2.2.0",
     "angular-bootstrap": "~1.1.2",
     "html5-boilerplate": "~5.2.0",
-    "bootstrap": "~3.3.6"
+    "bootstrap": "~3.3.6",
+    "angular-animate": "1.4"
   }
 }

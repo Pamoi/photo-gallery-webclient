@@ -2,6 +2,7 @@
 
 // Declare app level module which depends on views, and components
 angular.module('photo-gallery', [
+  'ngAnimate',
   'angularFileUpload',
   'ui.router',
   'ui.bootstrap',

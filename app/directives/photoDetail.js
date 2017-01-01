@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
+angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
 .directive('photoDetail', ['$window', '$timeout', '$uibModal', function($window, $timeout, $uibModal) {
   return {
@@ -15,8 +15,9 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
       deletePhoto: '&deletePhoto'
     },
     link: function($scope, elem, attrs) {
-      $scope.$watch('photo', function() {
+      $scope.$watch('photo', function(newValue, oldValue) {
         $scope.loading = true;
+        $scope.$apply();
       });
 
       function changePhoto(direction) {
@@ -26,8 +27,12 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
           } else if (direction == 'prev') {
             $scope.prev();
           }
+
+          $('#detailedPhoto').css('left', 0);
         });
       }
+
+      $scope.showBar = true;
 
       $scope.nextPhoto = function() {
         changePhoto('next');
@@ -58,42 +63,6 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
         });
       };
 
-      function setFrameSize() {
-        var frame = $('#photoFrame');
-        var photo = $('#detailedPhoto');
-        var centered = $('#centeredContent');
-
-        // Fit screen width if necessary
-        frame.width('auto');
-        var frameOuterWidth = frame.outerWidth(true);
-        var frameWidth = frame.width();
-        var paddingWidth = frameOuterWidth - frameWidth;
-        var windowWidth = $(window).width();
-        if (frameOuterWidth > windowWidth) {
-          // Hide vertical frame side if photo is larger than screen
-          frame.css('padding', '10px 0px');
-          frame.width(windowWidth);
-        }
-
-        // Fit screen height if necessary
-        frame.height('auto');
-        photo.height('auto');
-        var buttonHeight = $('#closeDetailButton').outerHeight(true);
-        var centeredOuterHeight = centered.outerHeight(true);
-        var frameHeight = frame.height();
-        var paddingHeight = centeredOuterHeight - frameHeight;
-        var windowHeight = $(window).height();
-        if (centeredOuterHeight > windowHeight) {
-          photo.height(windowHeight - paddingHeight - 2 * buttonHeight);
-          photo.width('auto');
-          frame.width('auto');
-          // Show vertical frame side if vertical resizing reduced image width
-          if (photo.width() < windowWidth - paddingWidth) {
-            frame.css('padding', '10px');
-          }
-        }
-      }
-
       function onKeyPressed(e) {
         $timeout(function() {
           if ($scope.photo) {
@@ -114,25 +83,70 @@ angular.module('photo-gallery.photoDetail', ['ui.bootstrap'])
         $scope.loading = false;
         $('#detailedPhoto').fadeIn();
         $scope.$apply();
-        setFrameSize();
+        //autoHideBar();
+      }
+
+      var timerPromise;
+
+      function autoHideBar() {
+        $timeout.cancel(timerPromise);
+        timerPromise = $timeout(function() { $scope.showBar = false; }, 5000);
       }
 
       // Register event callbacks
       var photo = $('#detailedPhoto');
-      angular.element($window).on('resize', setFrameSize);
+      var overlay = $('#overlay');
       photo.on('load', onImgLoad);
       photo.on('dragstart', function(e) { e.preventDefault(); });
-      photo.on('swipeleft', function() { changePhoto('next'); });
-      photo.on('swiperight', function() { changePhoto('prev'); });
       angular.element($window).on('keydown', onKeyPressed);
 
       elem.on('$destroy', function() {
-        angular.element($window).off('resize', setFrameSize);
         photo.off('load');
-        photo.off('swipeleft');
-        photo.off('swiperight');
+        photo.off('click');
         angular.element($window).off('keydown', onKeyPressed);
       });
+
+      var xDragStart;
+      var dragging = false;
+      var mousedown = false;
+      var dragLimitToChangePhoto = 70;
+
+      photo.on('mousedown', function(e) {
+        xDragStart = e.pageX;
+        mousedown = true;
+      });
+
+      overlay.on('mousemove', function(e) {
+        if (mousedown) {
+          var dragLength = e.pageX - xDragStart;
+          if (Math.abs(dragLength) > 10) {
+            dragging = true;
+          }
+          photo.css('left', dragLength);
+        }
+      });
+
+      overlay.on('mouseup', function(e) {
+        mousedown = false;
+
+        if (dragging) {
+          dragging = false;
+          var dragLength = e.pageX - xDragStart;
+
+          if (dragLength < -dragLimitToChangePhoto) {
+            changePhoto('next');
+          } else if (dragLength > dragLimitToChangePhoto) {
+            changePhoto('prev');
+          } else {
+            photo.css('left', 0);
+          }
+        } else {
+          //autoHideBar();
+          $scope.showBar = !$scope.showBar;
+          $scope.$apply();
+        }
+      });
+
     }
   };
 }])

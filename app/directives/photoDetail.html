@@ -27,5 +27,17 @@
       </div>
     </div>
   </div>-->
+  <div class="top-bar" ng-show="showBar">
+    <a ng-click="photo = null" href="">
+      <span class="bar-icon glyphicon glyphicon-remove"></span>
+    </a>
+    <a ng-click="" href="">
+      <span class="bar-icon glyphicon glyphicon-download"></span>
+    </a>
+    <a ng-click="" href="">
+      <span class="bar-icon glyphicon glyphicon-trash"></span>
+    </a>
+  </div>
+  <img src="img/loading.gif" alt="" class="overlay-img" ng-show="loading" />
   <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
 </div>
