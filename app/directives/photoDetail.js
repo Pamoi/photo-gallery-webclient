@@ -140,9 +140,9 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           var dragLength = e.pageX - xDragStart;
 
           if (dragLength < -dragLimitToChangePhoto) {
-            changePhoto('next');
+            $scope.nextPhoto();
           } else if (dragLength > dragLimitToChangePhoto) {
-            changePhoto('prev');
+            $scope.previousPhoto();
           } else {
             photo.css('left', 0);
           }
