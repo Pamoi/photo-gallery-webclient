@@ -50,15 +50,6 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         $scope.stopShow();
       }
 
-      var showPromise;
-
-      function photoShow() {
-        showPromise = $timeout(function() {
-          changePhoto('next');
-          photoShow();
-        }, 5000);
-      }
-
       $scope.startShow = function() {
         $scope.isShowRunning = true;
         photoShow();
@@ -67,6 +58,17 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       $scope.stopShow = function() {
         $scope.isShowRunning = false;
         $timeout.cancel(showPromise);
+      }
+
+      // Helper functions for changing photos and slideshow
+
+      var showPromise;
+
+      function photoShow() {
+        showPromise = $timeout(function() {
+          changePhoto('next');
+          photoShow();
+        }, 5000);
       }
 
       function changePhoto(direction) {
@@ -80,6 +82,12 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           $('#detailedPhoto').css('left', 0);
         });
       }
+
+      // DOM elements
+      var photo = $('#detailedPhoto');
+      var overlay = $('#overlay');
+
+      // Event callbacks
 
       function onKeyPressed(e) {
         $timeout(function() {
@@ -100,41 +108,21 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       function onImgLoad() {
         $scope.loading = false;
         $scope.$apply();
-        $('#detailedPhoto').hide().fadeIn(700);
-        //autoHideBar();
+        photo.hide().fadeIn(700);
       }
 
-      var timerPromise;
-
-      function autoHideBar() {
-        $timeout.cancel(timerPromise);
-        timerPromise = $timeout(function() { $scope.showBar = false; }, 5000);
-      }
-
-      // Register event callbacks
-      var photo = $('#detailedPhoto');
-      var overlay = $('#overlay');
-      photo.on('load', onImgLoad);
-      photo.on('dragstart', function(e) { e.preventDefault(); });
-      angular.element($window).on('keydown', onKeyPressed);
-
-      elem.on('$destroy', function() {
-        photo.off('load');
-        photo.off('click');
-        angular.element($window).off('keydown', onKeyPressed);
-      });
-
+      // Variables to handle photo dragging
       var xDragStart;
       var dragging = false;
       var mousedown = false;
       var dragLimitToChangePhoto = 70;
 
-      photo.on('mousedown', function(e) {
+      function onMouseDown(e) {
         xDragStart = e.pageX;
         mousedown = true;
-      });
+      }
 
-      overlay.on('mousemove', function(e) {
+      function onMouseMove(e) {
         if (mousedown) {
           var dragLength = e.pageX - xDragStart;
           if (Math.abs(dragLength) > 10) {
@@ -142,9 +130,9 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           }
           photo.css('left', dragLength);
         }
-      });
+      }
 
-      overlay.on('mouseup', function(e) {
+      function onMouseUp(e) {
         mousedown = false;
 
         if (dragging) {
@@ -159,12 +147,23 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
             photo.css('left', 0);
           }
         } else {
-          //autoHideBar();
           if (e.target.id == 'detailedPhoto' || e.target.id == 'overlay') {
             $scope.showBar = !$scope.showBar;
             $scope.$apply();
           }
         }
+      }
+
+      // Register the callbacks
+      photo.on('load', onImgLoad);
+      photo.on('mousedown', onMouseDown);
+      photo.on('dragstart', function(e) { e.preventDefault(); });
+      overlay.on('mousemove', onMouseMove);
+      overlay.on('mouseup', onMouseUp);
+      angular.element($window).on('keydown', onKeyPressed);
+
+      elem.on('$destroy', function() {
+        angular.element($window).off('keydown', onKeyPressed);
       });
 
     }
