@@ -17,6 +17,12 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
     link: function($scope, elem, attrs) {
       $scope.$watch('photo', function(newValue, oldValue) {
         $scope.loading = true;
+
+        if (newValue != null) {
+          $('body').css({overflow:'hidden'});
+        } else {
+          $('body').css({overflow:'auto'});
+        }
       });
 
       $scope.showBar = true;
