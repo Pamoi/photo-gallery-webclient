@@ -20,12 +20,15 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       });
 
       $scope.showBar = true;
+      $scope.isShowRunning = false;
 
       $scope.nextPhoto = function() {
+        $scope.stopShow();
         changePhoto('next');
       };
 
       $scope.previousPhoto = function() {
+        $scope.stopShow();
         changePhoto('prev');
       };
 
@@ -44,6 +47,26 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
       $scope.close = function() {
         $scope.photo = null;
+        $scope.stopShow();
+      }
+
+      var showPromise;
+
+      function photoShow() {
+        showPromise = $timeout(function() {
+          changePhoto('next');
+          photoShow();
+        }, 5000);
+      }
+
+      $scope.startShow = function() {
+        $scope.isShowRunning = true;
+        photoShow();
+      }
+
+      $scope.stopShow = function() {
+        $scope.isShowRunning = false;
+        $timeout.cancel(showPromise);
       }
 
       function changePhoto(direction) {
@@ -62,11 +85,11 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         $timeout(function() {
           if ($scope.photo) {
             if (e.keyCode == 39) {
-              changePhoto('next');
+              $scope.nextPhoto();
             } else if (e.keyCode == 37) {
-              changePhoto('prev');
+              $scope.previousPhoto();
             } else if (e.keyCode == 27) {
-              $scope.photo = null;
+              $scope.close();
             } else {
               return;
             }

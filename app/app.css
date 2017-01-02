@@ -130,6 +130,10 @@ p {
   margin: 5px 10px;
 }
 
+.bar-icon:hover {
+  color: #bdbdbd;
+}
+
 .arrow-right {
   position: absolute;
   top: 0;
@@ -165,6 +169,10 @@ p {
   margin-top: -14px;
   margin-left: 15px;
   margin-right: 15px;
+}
+
+.arrow-icon:hover {
+  color: #bdbdbd;
 }
 
 .delete-button {
