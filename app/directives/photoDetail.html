@@ -1,43 +1,21 @@
 <div class="overlay" id="overlay" ng-show="photo">
-  <!--<div class="centered-content-outer">
-    <div class="centered-content" id="centeredContent">
-      <div class="overlay-photo-frame" id="photoFrame">
-        <div>
-          <button class="btn btn-photo-frame pull-right margin-bottom-small" ng-click="photo = null" id="closeDetailButton">
-            <span class="glyphicon glyphicon-remove"></span>
-          </button>
-        </div>
-        <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
-        <div ng-show="loading" class="centered-content-outer photo-placeholder">
-          <div class="centered-content">
-            <img src="img/loading.gif" alt="" />
-          </div>
-        </div>
-        <div class="margin-top-small">
-          <button class="btn btn-default" ng-click="previousPhoto()">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-          </button>
-          <button class="btn btn-default" ng-click="openModal()">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
-          <button class="btn btn-default" ng-click="nextPhoto()">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>-->
-  <div class="top-bar" ng-show="showBar">
-    <a ng-click="photo = null" href="">
-      <span class="bar-icon glyphicon glyphicon-remove"></span>
-    </a>
-    <a ng-click="" href="">
-      <span class="bar-icon glyphicon glyphicon-download"></span>
-    </a>
-    <a ng-click="" href="">
-      <span class="bar-icon glyphicon glyphicon-trash"></span>
-    </a>
+
+  <div class="top-bar" id="topBar" ng-show="showBar">
+    <span class="bar-icon glyphicon glyphicon-remove clickable" ng-click="close()"></span>
+    <span class="bar-icon glyphicon glyphicon-download clickable" ng-click="downloadPhoto()"></span>
+    <span class="bar-icon glyphicon glyphicon-trash clickable" ng-click="delete()"></span>
   </div>
-  <img src="img/loading.gif" alt="" class="overlay-img" ng-show="loading" />
-  <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img" id="detailedPhoto" ng-hide="loading" />
+
+  <div class="arrow-left" ng-show="showBar">
+    <span class="arrow-icon glyphicon glyphicon-chevron-left clickable" ng-click="previousPhoto()"></span>
+  </div>
+
+  <div class="arrow-right" ng-show="showBar">
+    <span class="arrow-icon glyphicon glyphicon-chevron-right clickable" ng-click="nextPhoto()"></span>
+  </div>
+
+  <img src="img/loading.gif" alt="" class="overlay-img no-select" ng-show="loading" />
+
+  <img http-src="{{ makeUrl({id: photo.id}) }}" alt="" class="overlay-img no-select"
+  id="detailedPhoto" ng-hide="loading" />
 </div>

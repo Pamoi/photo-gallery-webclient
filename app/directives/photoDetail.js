@@ -17,8 +17,34 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
     link: function($scope, elem, attrs) {
       $scope.$watch('photo', function(newValue, oldValue) {
         $scope.loading = true;
-        $scope.$apply();
       });
+
+      $scope.showBar = true;
+
+      $scope.nextPhoto = function() {
+        changePhoto('next');
+      };
+
+      $scope.previousPhoto = function() {
+        changePhoto('prev');
+      };
+
+      $scope.downloadPhoto = function() {
+        var link = document.createElement('a');
+        link.href = $('#detailedPhoto').attr('src');
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+      };
+
+      $scope.delete = function() {
+        $scope.deletePhoto({photo: $scope.photo});
+        $scope.photo = null;
+      };
+
+      $scope.close = function() {
+        $scope.photo = null;
+      }
 
       function changePhoto(direction) {
         $timeout(function() {
@@ -31,37 +57,6 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           $('#detailedPhoto').css('left', 0);
         });
       }
-
-      $scope.showBar = true;
-
-      $scope.nextPhoto = function() {
-        changePhoto('next');
-      };
-
-      $scope.previousPhoto = function() {
-        changePhoto('prev');
-      };
-
-      $scope.openModal = function() {
-        var modal = $uibModal.open({
-          controller: 'PhotoModalCtrl',
-          controllerAs: '$ctrl',
-          templateUrl: 'directives/photoDetailModal.html',
-          resolve: {
-            photo: function() {
-              return $scope.photo;
-            },
-            canDelete: function() {
-              return $scope.isAuthor;
-            }
-          }
-        });
-
-        modal.result.then(function() {
-          $scope.deletePhoto({photo: $scope.photo});
-          $scope.photo = null;
-        });
-      };
 
       function onKeyPressed(e) {
         $timeout(function() {
@@ -81,8 +76,8 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
       function onImgLoad() {
         $scope.loading = false;
-        $('#detailedPhoto').fadeIn();
         $scope.$apply();
+        $('#detailedPhoto').hide().fadeIn(700);
         //autoHideBar();
       }
 
@@ -142,34 +137,13 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           }
         } else {
           //autoHideBar();
-          $scope.showBar = !$scope.showBar;
-          $scope.$apply();
+          if (e.target.id == 'detailedPhoto' || e.target.id == 'overlay') {
+            $scope.showBar = !$scope.showBar;
+            $scope.$apply();
+          }
         }
       });
 
     }
   };
 }])
-
-.controller('PhotoModalCtrl', ['$uibModalInstance', 'photo', 'canDelete',
-function ($uibModalInstance, photo, canDelete, deletePhoto) {
-  var $ctrl = this;
-  $ctrl.canDelete = canDelete;
-  $ctrl.photo = photo;
-
-  $ctrl.downloadPhoto = function() {
-    var link = document.createElement('a');
-    link.href = $('#detailedPhoto').attr('src');
-    link.download = '';
-    document.body.appendChild(link);
-    link.click();
-  };
-
-  $ctrl.delete = function() {
-    $uibModalInstance.close();
-  };
-
-  $ctrl.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
-  };
-}]);
