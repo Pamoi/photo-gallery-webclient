@@ -18,6 +18,10 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       $scope.$watch('photo', function(newValue, oldValue) {
         $scope.loading = true;
 
+        if (oldValue == null || oldValue == undefined) {
+          showBar();
+        }
+
         if (newValue != null) {
           $('body').css({overflow:'hidden'});
         } else {
@@ -69,12 +73,13 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       // Helper functions for changing photos and slideshow
 
       var showPromise;
+      var showDelay = 5000;
 
       function photoShow() {
         showPromise = $timeout(function() {
           changePhoto('next');
           photoShow();
-        }, 5000);
+        }, showDelay);
       }
 
       function changePhoto(direction) {
@@ -87,6 +92,35 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
           $('#detailedPhoto').css('left', 0);
         });
+      }
+
+      // Handle buttons show/hide
+
+      var buttonLeft = $('#buttonLeft'), buttonRight = $('#buttonRight'), actionBar = $('#topBar');
+      var leftOver = false, rightOver = false, barOver = false;
+      var barPromise;
+      var barTimeout = 2500;
+
+      // Remember if the mouse is over a button
+      buttonLeft.on('mouseenter', function() { leftOver = true; console.log('true'); });
+      buttonLeft.on('mouseleave', function() { leftOver = false; });
+
+      buttonRight.on('mouseenter', function() { rightOver = true; });
+      buttonRight.on('mouseleave', function() { rightOver = false; });
+
+      actionBar.on('mouseenter', function() { barOver = true; });
+      actionBar.on('mouseleave', function() { barOver = false; });
+
+      function hideBar() {
+        if (!(leftOver || rightOver || barOver)) {
+          $scope.showBar = false;
+        }
+      }
+
+      function showBar() {
+        $timeout(function() { $scope.showBar = true; });
+        $timeout.cancel(barPromise);
+        barPromise = $timeout(hideBar, barTimeout)
       }
 
       // DOM elements
@@ -136,6 +170,8 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           }
           photo.css('left', dragLength);
         }
+
+        showBar();
       }
 
       function onMouseUp(e) {
@@ -151,11 +187,6 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
             $scope.previousPhoto();
           } else {
             photo.css('left', 0);
-          }
-        } else {
-          if (e.target.id == 'detailedPhoto' || e.target.id == 'overlay') {
-            $scope.showBar = !$scope.showBar;
-            $scope.$apply();
           }
         }
       }

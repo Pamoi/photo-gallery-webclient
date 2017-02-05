@@ -9,11 +9,12 @@
   </div>
 
   <div class="arrow-left" ng-show="showBar">
-    <span class="arrow-icon glyphicon glyphicon-chevron-left clickable" ng-click="previousPhoto()"></span>
+    <span class="arrow-icon glyphicon glyphicon-chevron-left clickable" ng-click="previousPhoto()" id="buttonLeft">
+    </span>
   </div>
 
   <div class="arrow-right" ng-show="showBar">
-    <span class="arrow-icon glyphicon glyphicon-chevron-right clickable" ng-click="nextPhoto()"></span>
+    <span class="arrow-icon glyphicon glyphicon-chevron-right clickable" ng-click="nextPhoto()" id="buttonRight"></span>
   </div>
 
   <img src="img/loading.gif" alt="" class="overlay-img no-select" ng-show="loading" />
