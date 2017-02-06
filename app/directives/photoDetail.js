@@ -15,6 +15,8 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       deletePhoto: '&deletePhoto'
     },
     link: function($scope, elem, attrs) {
+
+      // Scope functions
       $scope.$watch('photo', function(newValue, oldValue) {
         $scope.loading = true;
 
@@ -70,7 +72,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         $timeout.cancel(showPromise);
       }
 
-      // Helper functions for changing photos and slideshow
+      // Handle slideshow
 
       var showPromise;
       var showDelay = 5000;
@@ -94,7 +96,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         });
       }
 
-      // Handle buttons show/hide
+      // Handle action bar autohide
 
       var buttonLeft = $('#buttonLeft'), buttonRight = $('#buttonRight'), actionBar = $('#topBar');
       var leftOver = false, rightOver = false, barOver = false;
@@ -123,11 +125,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         barPromise = $timeout(hideBar, barTimeout)
       }
 
-      // DOM elements
-      var photo = $('#detailedPhoto');
-      var overlay = $('#overlay');
-
-      // Event callbacks
+      // Handle keyboard events
 
       function onKeyPressed(e) {
         $timeout(function() {
@@ -145,13 +143,18 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         });
       }
 
+      // Handle photo dragging
+
+      var photo = $('#detailedPhoto');
+      var overlay = $('#overlay');
+
       function onImgLoad() {
         $scope.loading = false;
         $scope.$apply();
         photo.hide().fadeIn(700);
       }
 
-      // Variables to handle photo dragging
+      // Variables to compute drag length
       var xDragStart;
       var dragging = false;
       var mousedown = false;
@@ -191,7 +194,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         }
       }
 
-      // Register the callbacks
+      // JS events callbacks
       photo.on('load', onImgLoad);
       photo.on('mousedown', onMouseDown);
       photo.on('dragstart', function(e) { e.preventDefault(); });
