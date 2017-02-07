@@ -65,7 +65,7 @@ function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backend
     });
   };
 
-  $scope.isUserAuthor = function() {
+  function isUserAuthor() {
     if (!$scope.user || !$scope.album || !$scope.album.authors) {
       return false;
     }
@@ -74,6 +74,16 @@ function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backend
       return a.id == $scope.user.id;
     }).length > 0;
   };
+
+  $scope.canEdit = function() {
+    var isAdmin = false;
+
+    if ($scope.user && $scope.user.admin) {
+      isAdmin = true;
+    }
+
+    return isUserAuthor() || isAdmin;
+  }
 
   $scope.deleteAlbum = function() {
     var modal = $uibModal.open({

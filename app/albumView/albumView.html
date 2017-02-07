@@ -17,10 +17,10 @@
     <button class="btn btn-primary" ng-click="downloadAlbum()">
       <i class="glyphicon glyphicon-download"></i> Télécharger
     </button>
-    <button class="btn btn-primary" ui-sref="editAlbum({ id: album.id })" ng-show="isUserAuthor()">
+    <button class="btn btn-primary" ui-sref="editAlbum({ id: album.id })" ng-show="canEdit()">
       <i class="glyphicon glyphicon-pencil"></i> Modifier
     </button>
-    <button class="btn btn-danger" ng-click="deleteAlbum()" ng-show="isUserAuthor()">
+    <button class="btn btn-danger" ng-click="deleteAlbum()" ng-show="canEdit()">
       <i class="glyphicon glyphicon-trash"></i> Supprimer
     </button>
   </div>
