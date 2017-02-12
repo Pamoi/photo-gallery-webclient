@@ -115,7 +115,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
       function hideBar() {
         if (!(leftOver || rightOver || barOver)) {
-          $scope.showBar = false;
+          $timeout(function() { $scope.showBar = false; });
         }
       }
 
@@ -143,7 +143,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         });
       }
 
-      // Handle photo dragging
+      // Handle photo switching
 
       var photo = $('#detailedPhoto');
       var overlay = $('#overlay');
@@ -154,58 +154,40 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
         photo.hide().fadeIn(700);
       }
 
-      // Variables to compute drag length
-      var xDragStart;
-      var dragging = false;
-      var mousedown = false;
-      var dragLimitToChangePhoto = 70;
-
-      function onMouseDown(e) {
-        xDragStart = e.pageX;
-        mousedown = true;
-      }
-
-      function onMouseMove(e) {
-        if (mousedown) {
-          var dragLength = e.pageX - xDragStart;
-          if (Math.abs(dragLength) > 10) {
-            dragging = true;
-          }
-          photo.css('left', dragLength);
-        }
-
-        showBar();
-      }
-
-      function onMouseUp(e) {
-        mousedown = false;
-
-        if (dragging) {
-          dragging = false;
-          var dragLength = e.pageX - xDragStart;
-
-          if (dragLength < -dragLimitToChangePhoto) {
-            $scope.nextPhoto();
-          } else if (dragLength > dragLimitToChangePhoto) {
-            $scope.previousPhoto();
-          } else {
-            photo.css('left', 0);
-          }
-        }
-      }
-
       // JS events callbacks
       photo.on('load', onImgLoad);
-      photo.on('mousedown', onMouseDown);
       photo.on('dragstart', function(e) { e.preventDefault(); });
-      overlay.on('mousemove', onMouseMove);
-      overlay.on('mouseup', onMouseUp);
+      overlay.on('mousemove', showBar);
       angular.element($window).on('keydown', onKeyPressed);
 
       elem.on('$destroy', function() {
         angular.element($window).off('keydown', onKeyPressed);
       });
 
+      // Hammer events
+      var mc = new Hammer(document.getElementById('overlay'));
+
+      mc.on('pan', function(ev) {
+        photo.css('left', ev.deltaX);
+      });
+
+      mc.on('panend', function(ev) {
+        if (ev.direction == Hammer.DIRECTION_LEFT) {
+          $scope.nextPhoto();
+        } else if (ev.direction == Hammer.DIRECTION_RIGHT) {
+          $scope.previousPhoto();
+        } else {
+          photo.css('left', 0);
+        }
+      });
+
+      mc.on('tap', function(ev) {
+        if ($scope.showBar) {
+          hideBar();
+        } else {
+          showBar();
+        }
+      });
     }
   };
-}])
+}]);
