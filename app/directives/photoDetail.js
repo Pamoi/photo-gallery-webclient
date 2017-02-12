@@ -2,7 +2,7 @@
 
 angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
 
-.directive('photoDetail', ['$window', '$timeout', '$uibModal', function($window, $timeout, $uibModal) {
+.directive('photoDetail', ['$window', '$timeout', '$uibModal', '$http', function($window, $timeout, $uibModal, $http) {
   return {
     templateUrl: 'directives/photoDetail.html',
     restrict: 'E',
@@ -12,6 +12,7 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       prev: '&prev',
       next: '&next',
       makeUrl: '&makeUrl',
+      makeDownloadUrl: '&makeDownloadUrl',
       deletePhoto: '&deletePhoto'
     },
     link: function($scope, elem, attrs) {
@@ -45,11 +46,23 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
       };
 
       $scope.downloadPhoto = function() {
-        var link = document.createElement('a');
-        link.href = $('#detailedPhoto').attr('src');
-        link.download = '';
-        document.body.appendChild(link);
-        link.click();
+        var url = $scope.makeDownloadUrl({id: $scope.photo.id});
+        $scope.downloading = true;
+
+        $http.get(url, { responseType: 'arraybuffer' }).then(function(response) {
+          var blob = new Blob(
+            [ response.data ],
+            { type: response.headers('Content-Type') }
+          );
+
+          $scope.downloading = false;
+
+          var link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = $scope.photo.id + extensionFromType(blob.type);
+          document.body.appendChild(link);
+          link.click();
+        });
       };
 
       $scope.delete = function() {
@@ -188,6 +201,18 @@ angular.module('photo-gallery.photoDetail', ['ngAnimate', 'ui.bootstrap'])
           showBar();
         }
       });
+
+      // Utility function
+
+      function extensionFromType(type) {
+        if (type.indexOf('jpg') != -1 || type.indexOf('jpeg') != -1) {
+          return '.jpg';
+        } else if (type.indexOf('png') != -1) {
+          return '.png';
+        } else {
+          return '';
+        }
+      }
     }
   };
 }]);

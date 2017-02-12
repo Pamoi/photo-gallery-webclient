@@ -2,10 +2,11 @@
 
   <div class="top-bar" id="topBar" ng-show="showBar">
     <span class="bar-icon glyphicon glyphicon-remove clickable" ng-click="close()"></span>
-    <span class="bar-icon glyphicon glyphicon-download clickable" ng-click="downloadPhoto()"></span>
     <span class="bar-icon glyphicon glyphicon-play clickable" ng-click="startShow()" ng-hide="isShowRunning"></span>
     <span class="bar-icon glyphicon glyphicon-pause clickable" ng-click="stopShow()" ng-show="isShowRunning"></span>
     <span class="bar-icon glyphicon glyphicon-trash clickable" ng-click="delete()" ng-show="isAuthor"></span>
+    <span class="bar-icon glyphicon glyphicon-download clickable" ng-click="downloadPhoto()" ng-hide="downloading"></span>
+    <img src="img/loading.gif" ng-show="downloading" class="pull-right" />
   </div>
 
   <div class="arrow-left" ng-show="showBar">
