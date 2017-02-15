@@ -46,10 +46,16 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
     // Do not create global uploader as the user will be redirected
     $scope.uploader = new FileUploader();
   }
+
   $scope.totalSize = 0;
   $scope.uploader.onAfterAddingFile = function(item) {
     $scope.totalSize += item.file.size;
   };
+  
+  $scope.removeItem = function(item) {
+    $scope.totalSize -= item.file.size;
+    item.remove();
+  }
 
   // Get user list to add authors
   function isNotCurrentUser(user) {
