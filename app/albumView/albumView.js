@@ -61,6 +61,8 @@ function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backend
       var index = $scope.album.photos.indexOf(photo);
       if (index > -1) {
         $scope.album.photos.splice(index, 1);
+      } else {
+        alert('coucou !');
       }
     });
   };
@@ -103,6 +105,10 @@ function($scope, $state, $stateParams, $window, $uibModal, albumFactory, backend
   };
 
   $scope.downloadAlbum = function() {
+    if ($scope.album.photos.length == 0) {
+      return;
+    }
+
     albumFactory.getDownloadToken($scope.album.id).then(function(token) {
       var link = document.createElement('a');
       link.href = backendUrl + '/album/' + $scope.album.id + '/download?token=' + token;

@@ -14,7 +14,7 @@
     </h1>
   </div>
   <div style="margin-bottom:20px;">
-    <button class="btn btn-primary" ng-click="downloadAlbum()">
+    <button class="btn btn-primary" ng-click="downloadAlbum()" ng-class="{disabled: album.photos.length == 0}">
       <i class="glyphicon glyphicon-download"></i> Télécharger
     </button>
     <button class="btn btn-primary" ui-sref="editAlbum({ id: album.id })" ng-show="canEdit()">
@@ -48,5 +48,5 @@
 
 <!-- Photo detail overlay -->
 <photo-detail photo="detailedPhoto" prev="previousPhoto()" next="nextPhoto()" make-url="makeResizedUrl(id)"
-make-download-url="makePhotoUrl(id)" is-author="isUserAuthor()" delete-photo="deletePhoto(photo)">
+make-download-url="makePhotoUrl(id)" is-author="canEdit()" delete-photo="deletePhoto(photo)">
 </photo-detail>
