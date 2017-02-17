@@ -13,14 +13,15 @@
       </small>
     </h1>
   </div>
-  <div style="margin-bottom:20px;">
-    <button class="btn btn-primary" ng-click="downloadAlbum()" ng-class="{disabled: album.photos.length == 0}">
+  <div class="margin-bottom-medium">
+    <button class="btn btn-primary margin-bottom-small" ng-click="downloadAlbum()"
+    ng-class="{disabled: album.photos.length == 0}">
       <i class="glyphicon glyphicon-download"></i> Télécharger
     </button>
-    <button class="btn btn-primary" ui-sref="editAlbum({ id: album.id })" ng-show="canEdit()">
+    <button class="btn btn-primary margin-bottom-small" ui-sref="editAlbum({ id: album.id })" ng-show="canEdit()">
       <i class="glyphicon glyphicon-pencil"></i> Modifier
     </button>
-    <button class="btn btn-danger" ng-click="deleteAlbum()" ng-show="canEdit()">
+    <button class="btn btn-danger margin-bottom-small" ng-click="deleteAlbum()" ng-show="canEdit()">
       <i class="glyphicon glyphicon-trash"></i> Supprimer
     </button>
   </div>

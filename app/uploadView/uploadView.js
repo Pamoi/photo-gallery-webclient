@@ -187,7 +187,7 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
     if (wq.length > 0 && busy == false) {
       busy = true;
       var fn = wq.shift();
-      $timeout(fn, 1000);
+      $timeout(fn, 500);
     }
   }
 

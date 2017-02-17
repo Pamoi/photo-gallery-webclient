@@ -58,6 +58,10 @@ p {
   margin-bottom: 5px;
 }
 
+.margin-bottom-medium {
+  margin-bottom: 20px;
+}
+
 .margin-top-small {
   margin-top: 5px;
 }
