@@ -51,7 +51,7 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
   $scope.uploader.onAfterAddingFile = function(item) {
     $scope.totalSize += item.file.size;
   };
-  
+
   $scope.removeItem = function(item) {
     $scope.totalSize -= item.file.size;
     item.remove();
@@ -171,11 +171,30 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
     }
   };
 
-  var count = 0;
+  // Helper functions to load images sequentially to avoid freezing the UI
+  var wq = [];
+  var busy = false;
+
+  function enqueue(fn) {
+    wq.push(function() {
+      fn();
+      busy = false;
+      loadFirst();
+    });
+  }
+
+  function loadFirst() {
+    if (wq.length > 0 && busy == false) {
+      busy = true;
+      var fn = wq.shift();
+      $timeout(fn, 1000);
+    }
+  }
 
   return {
     restrict: 'A',
-    template: '<img src="img/loading.gif" alt="" class="photo-preview" />',
+    template: '<canvas />',
+    replace: true,
     link: function(scope, element, attributes) {
       if (!helper.support) return;
 
@@ -184,23 +203,37 @@ function($scope, $state, $stateParams, albumFactory, userFactory, FileUploader) 
       if (!helper.isFile(params.file)) return;
       if (!helper.isImage(params.file)) return;
 
-      var img = element.find('img');
-      var reader = new FileReader();
+      // Variable to handle thumbnail size
+      var maxWidth = 200;
+      var maxHeight = 200;
 
-      reader.onload = function (e) {
-        img.attr('src', e.target.result);
-      };
+      var img = new Image;
+      var ctx = element[0].getContext('2d');
 
-      // Empirical timeout to avoid blocking the UI
-      var promise = $timeout(function() {
-        reader.readAsDataURL(params.file);
-        count -= 2000;
-      }, count);
-      count += 2000;
+      img.onload = function() {
+        // Create thumbnail
+        var ratio = img.width / img.height;
+        var width = img.width;
+        var height = img.height;
 
-      element.on('$destroy', function() {
-        $timeout.cancel(promise);
+        if (width > maxWidth) {
+          width = maxWidth;
+          height = width * (1 / ratio);
+        }
+
+        if (height > maxHeight) {
+          height = Math.min(maxHeight, maxWidth * (1 / ratio));
+          width = height * ratio;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+      }
+
+      enqueue(function() {
+        img.src = URL.createObjectURL(params.file);
       });
+
+      $timeout(loadFirst);
     }
   };
 }]);
